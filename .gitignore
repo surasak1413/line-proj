@@ -36,3 +36,5 @@ logs
 vendor
 
 __debug_bin*
+
+.env
