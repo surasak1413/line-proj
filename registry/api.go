@@ -9,4 +9,7 @@ import (
 
 func APIRegister(server *echo.Echo) {
 	server.POST("/v1/webhook", handler.MessagingAPIWebhook, middleware.LineSignatureValidation)
+
+	server.Static("/webpages", "webpages")
+
 }
