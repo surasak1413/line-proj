@@ -38,3 +38,7 @@ vendor
 __debug_bin*
 
 .env
+
+app_mac_amd
+
+build.sh
