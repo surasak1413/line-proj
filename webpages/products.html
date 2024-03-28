@@ -38,93 +38,31 @@
 <script src="./init.js"></script>
 
 <script>
-    let productList = [
-        {
-            "id": "1",
-            "product_img": "https://www.mos-th.com/wp-content/uploads/2021/08/Orange-Juice.png",
-            "product_name": "น้ำส้ม",
-            "product_price": "25.00"
-        },
-        {
-            "id": "2",
-            "product_img": "https://img.wongnai.com/p/1920x0/2022/06/24/727921c73f994f67a52d8f05c0eb5ad3.jpg",
-            "product_name": "กาแฟเย็น",
-            "product_price": "30.00"
-        },
-        {
-            "id": "3",
-            "product_img": "https://img.kapook.com/u/2021/wanwanat/1646050783.jpg",
-            "product_name": "ชาเขียว",
-            "product_price": "20.00"
-        }
-    ]
+    let productList = []
+
+
+    async function getProducts() {
+        let products = []
+        await $.ajax({
+            url: "/v1/products",
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                products = response.datas || []
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        return products;
+    }
 
 
     const url = new URL(window.location.href);
     const id = url.searchParams.get('id') || '';
 
-    productList.map(function (product) {
-
-        if (id == "") {
-            $("#product-box").append(`
-            <div class="proflile-img">
-                <img src="${product.product_img}">
-            </div>
-            <div class=" d-flex justify-content-center mt-6">
-                <span class=" fw-bolder " style="font-size: 30px;">
-                    ${product.product_name}
-                </span>
-            </div>
-            <div class=" d-flex justify-content-center ">
-                <span class=" fw-bolder fs-3">
-                    ราคา : <span class="text-success">${product.product_price}</span>
-                </span>
-            </div>
-
-            <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
-                <button class="btn btn-primary w-75  fs-1 my-2">
-                    ซื้อเลย
-                </button>
-            </div>
-            <div class=" d-flex justify-content-center  gap-2 align-items-center">
-                <button class="btn btn-success w-75  fs-1 my-2" onclick="shareMessage(${product.id})">
-                    แชร์
-                </button>
-            </div>
-            <hr>
-        `)
-        } else {
-            if (product.id == id) {
-                $("#product-box").append(`
-                <div class="proflile-img">
-                    <img src="${product.product_img}">
-                </div>
-                <div class=" d-flex justify-content-center mt-6">
-                    <span class=" fw-bolder " style="font-size: 30px;">
-                        ${product.product_name}
-                    </span>
-                </div>
-                <div class=" d-flex justify-content-center ">
-                    <span class=" fw-bolder fs-3">
-                        ราคา : <span class="text-success">${product.product_price}</span>
-                    </span>
-                </div>
-    
-                <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
-                    <button class="btn btn-primary w-75  fs-1 my-2">
-                        ซื้อเลย
-                    </button>
-                </div>
-                <hr>
-            `)
-            }
-        }
-
-    })
-
 
     function shareMessage(id) {
-        let productData = productList.find(function (item) {
+        const productData = productList.find(function (item) {
             return item.id == id
         })
 
@@ -137,47 +75,54 @@
             "altText": productData.product_name,
             "contents": {
                 "type": "bubble",
-                "direction": "ltr",
-                "header": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": productData.product_name,
-                            "align": "center"
-                        }
-                    ]
-                },
                 "hero": {
                     "type": "image",
-                    "url": productData.product_img,
                     "size": "full",
-                    "aspectRatio": "16:9"
+                    "aspectRatio": "20:13",
+                    "aspectMode": "cover",
+                    "url": `${location.origin}/webpages/${productData.product_img}`,
                 },
                 "body": {
                     "type": "box",
                     "layout": "vertical",
+                    "spacing": "sm",
                     "contents": [
                         {
                             "type": "text",
-                            "text": `ราคา : ${productData.product_price} บาท`,
-                            "align": "center"
+                            "text": productData.product_name,
+                            "wrap": true,
+                            "weight": "bold",
+                            "size": "xl"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `฿${productData.product_price}`,
+                                    "wrap": true,
+                                    "weight": "bold",
+                                    "size": "xl",
+                                    "flex": 0
+                                }
+                            ]
                         }
                     ]
                 },
                 "footer": {
                     "type": "box",
-                    "layout": "horizontal",
+                    "layout": "vertical",
+                    "spacing": "sm",
                     "contents": [
                         {
                             "type": "button",
+                            "style": "primary",
                             "action": {
                                 "type": "uri",
-                                "label": "ซื้อตอนนี้",
+                                "label": "Buy Now",
                                 "uri": `${location.origin}/webpages/products.html?id=${productData.id}`
-                            },
-                            "style": "primary"
+                            }
                         }
                     ]
                 }
@@ -208,6 +153,282 @@
 
     }
 
+
+    function buyLiffFlexMessage(id) {
+        const productData = productList.find(function (item) {
+            return item.id == id
+        })
+
+        if (!productData) {
+            return false;
+        }
+
+        const reqFlex = {
+            "type": "flex",
+            "altText": "ใบเสร็จ",
+            "contents": {
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "ใบเสร็จ",
+                            "weight": "bold",
+                            "color": "#2d5de6",
+                            "size": "sm"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Gec Cafe",
+                            "weight": "bold",
+                            "size": "xxl",
+                            "margin": "md"
+                        },
+                        {
+                            "type": "text",
+                            "text": "989 Room A2, A2/1, B1, B2, Siam Piwat Tower, 16th Fl., Rama 1 Road, Pathumwan, Pathumwan, Bangkok 10330",
+                            "size": "xs",
+                            "color": "#aaaaaa",
+                            "wrap": true
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "xxl"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "xxl",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": productData.product_name,
+                                            "size": "sm",
+                                            "color": "#555555",
+                                            "flex": 0
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": `฿${productData.product_price
+                                                }`,
+                                            "size": "sm",
+                                            "color": "#111111",
+                                            "align": "end"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "separator",
+                                    "margin": "xxl"
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "margin": "xxl",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "ITEMS",
+                                            "size": "sm",
+                                            "color": "#555555"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "1",
+                                            "size": "sm",
+                                            "color": "#111111",
+                                            "align": "end"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "TOTAL",
+                                            "size": "sm",
+                                            "color": "#555555"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": `฿${productData.product_price
+                                                }`,
+                                            "size": "sm",
+                                            "color": "#111111",
+                                            "align": "end"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "Transfer",
+                                            "size": "sm",
+                                            "color": "#555555"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": `฿${productData.product_price
+                                                }`,
+                                            "size": "sm",
+                                            "color": "#111111",
+                                            "align": "end"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "CHANGE",
+                                            "size": "sm",
+                                            "color": "#555555"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "฿0.00",
+                                            "size": "sm",
+                                            "color": "#111111",
+                                            "align": "end"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "xxl"
+                        }
+                    ]
+                }
+            }
+        }
+        liff.sendMessages([
+            reqFlex
+        ]).then(() => {
+        }).catch((err) => {
+        });
+    }
+
+
+
+    function buyProduct(id) {
+        const productData = productList.find(function (item) {
+            return item.id == id
+        })
+
+        if (!productData) {
+            return false;
+        }
+
+        const reqBody = {
+            user_id: window.Profile.user_id,
+            ...productData,
+        }
+        try {
+            showLoading();
+            $.ajax({
+                url: "/v1/buy-product",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(reqBody),
+                success: function (response) {
+                    showMessage('', 'ซื้อสำเร็จ')
+                    buyLiffFlexMessage(reqBody.id)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showMessage('error', 'เกิดข้อผิดพลาด')
+                }
+            });
+        } catch (err) {
+            closeLoading();
+        } finally {
+
+        }
+
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        productList = await getProducts()
+        if (productList?.length > 0) {
+            productList.map(function (product) {
+
+                if (id == "") {
+                    $("#product-box").append(`
+                    <div class="proflile-img">
+                        <img src="${product.product_img}">
+                    </div>
+                    <div class=" d-flex justify-content-center mt-6">
+                        <span class=" fw-bolder " style="font-size: 30px;">
+                            ${product.product_name}
+                        </span>
+                    </div>
+                    <div class=" d-flex justify-content-center ">
+                        <span class=" fw-bolder fs-3">
+                            ราคา : <span class="text-success">${product.product_price}</span>
+                        </span>
+                    </div>
+        
+                    <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
+                        <button class="btn btn-primary w-75  fs-1 my-2" onclick="buyProduct(${product.id})">
+                            ซื้อเลย
+                        </button>
+                    </div>
+                    <div class=" d-flex justify-content-center  gap-2 align-items-center">
+                        <button class="btn btn-success w-75  fs-1 my-2" onclick="shareMessage(${product.id})">
+                            แชร์
+                        </button>
+                    </div>
+                    <hr>
+                `)
+                } else {
+                    if (product.id == id) {
+                        $("#product-box").append(`
+                        <div class="proflile-img">
+                            <img src="${product.product_img}">
+                        </div>
+                        <div class=" d-flex justify-content-center mt-6">
+                            <span class=" fw-bolder " style="font-size: 30px;">
+                                ${product.product_name}
+                            </span>
+                        </div>
+                        <div class=" d-flex justify-content-center ">
+                            <span class=" fw-bolder fs-3">
+                                ราคา : <span class="text-success">${product.product_price}</span>
+                            </span>
+                        </div>
+            
+                        <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
+                            <button class="btn btn-primary w-75  fs-1 my-2" onclick="buyProduct(${product.id})">
+                                ซื้อเลย
+                            </button>
+                        </div>
+                        <hr>
+                    `)
+                    }
+                }
+
+            })
+
+
+        }
+    });
 </script>
 
 </html>

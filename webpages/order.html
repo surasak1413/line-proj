@@ -39,63 +39,75 @@
 <script src="./init.js"></script>
 
 <script>
-    let productList = [
-        {
-            "id": "1",
-            "product_img": "https://www.mos-th.com/wp-content/uploads/2021/08/Orange-Juice.png",
-            "product_name": "น้ำส้ม",
-            "product_price": "25.00",
-            "product_num": "1",
-        },
-        {
-            "id": "2",
-            "product_img": "https://img.wongnai.com/p/1920x0/2022/06/24/727921c73f994f67a52d8f05c0eb5ad3.jpg",
-            "product_name": "กาแฟเย็น",
-            "product_price": "30.00",
-            "product_num": "1",
-        },
-        {
-            "id": "3",
-            "product_img": "https://img.kapook.com/u/2021/wanwanat/1646050783.jpg",
-            "product_name": "ชาเขียว",
-            "product_price": "20.00",
-            "product_num": "1",
-        }
-    ]
+    let orderList = []
 
-    productList.map(function (product) {
-        $("#product-box").append(`
-            <div class=" d-flex justify-content-start ">
-                <span class="text-start fw-bolder fs-3">
-                    หมายเลขคำสั่งซื้อ : <span class="text-dark">${product.id}</span>
-                </span>
-            </div>
-            <div class="proflile-img">
-                <img src="${product.product_img}">
-            </div>
-            <div class=" d-flex justify-content-center mt-6">
-                <span class=" fw-bolder " style="font-size: 30px2;">
-                    ${product.product_name}
-                </span>
-            </div>
-            <div class=" d-flex justify-content-center ">
-                <span class=" fw-bolder fs-3">
-                    ราคา : <span class="text-success">${product.product_price}</span>
-                </span>
-            </div>
-            <div class=" d-flex justify-content-center ">
-                <span class=" fw-bolder fs-3">
-                    จำนวน : <span class="text-primary">${product.product_num}</span>
-                </span>
-            </div>
-            <div class=" d-flex justify-content-center ">
-                <span class=" fw-bolder fs-2">
-                    ราคารวม : <span class="text-danger">${Number(product.product_num) * Number(product.product_price)}</span>
-                </span>
-            </div>
-            <hr>
-        `)
-    })
+
+    async function getOrders() {
+        let orders = []
+        await $.ajax({
+            url: "/v1/orders",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                user_id: window.Profile.user_id,
+            }),
+            success: function (response) {
+                orders = response.datas || []
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        return orders;
+    }
+
+
+    document.addEventListener("DOMContentLoaded", async () => {
+
+        let interval;
+        showLoading();
+        interval = setInterval(async() => {
+            if (window.Profile) {
+                closeLoading();
+                clearInterval(interval)
+                orderList = await getOrders()
+                if (orderList.length > 0) {
+                    orderList.map(function (order,index) {
+                        $("#product-box").append(`
+                            <div class=" d-flex justify-content-start ">
+                                <span class="text-start fw-bolder fs-3">
+                                    เวลาสั่งซื้อ : <span class="text-dark">${moment(Number(order.order_time)*1000).format('DD-MM-YYYY HH:mm:ss')}</span>
+                                </span>
+                            </div>
+                            <div class="proflile-img">
+                                <img src="${order.product_img}">
+                            </div>
+                            <div class=" d-flex justify-content-center mt-6">
+                                <span class=" fw-bolder " style="font-size: 30px2;">
+                                    ${order.product_name}
+                                </span>
+                            </div>
+                            <div class=" d-flex justify-content-center ">
+                                <span class=" fw-bolder fs-3">
+                                    ราคา : <span class="text-success">${order.product_price}</span>
+                                </span>
+                            </div>
+                            <div class=" d-flex justify-content-center ">
+                                <span class=" fw-bolder fs-3">
+                                    จำนวน : <span class="text-primary">1</span>
+                                </span>
+                            </div>
+                            <hr>
+                        `)
+                    })
+
+                }
+            }
+
+        });
+
+
+    });
+
 
 </script>
 

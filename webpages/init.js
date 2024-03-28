@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.accessToken = liff.getAccessToken();
         liff.getProfile().then(profile => {
             window.Profile = {
+                user_id: profile.userId || '',
                 picture_url: profile.pictureUrl || '',
                 display_name: profile.displayName || '',
                 status_message: profile.statusMessage || '',

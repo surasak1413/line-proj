@@ -1,0 +1,38 @@
+[
+    {
+        "id": "1",
+        "product_img": "assets/pics/orange.png",
+        "product_name": "น้ำส้ม",
+        "product_price": "45.00"
+    },
+    {
+        "id": "2",
+        "product_img": "assets/pics/cafe.jpeg",
+        "product_name": "กาแฟเย็น",
+        "product_price": "40.00"
+    },
+    {
+        "id": "3",
+        "product_img": "assets/pics/green_tea.jpeg",
+        "product_name": "ชาเขียว",
+        "product_price": "45.00"
+    },
+    {
+        "id": "4",
+        "product_img": "assets/pics/pink.jpeg",
+        "product_name": "นมชมพู",
+        "product_price": "50.00"
+    },
+    {
+        "id": "5",
+        "product_img": "assets/pics/mocca.jpeg",
+        "product_name": "มอคค่า",
+        "product_price": "50.00"
+    },
+    {
+        "id": "6",
+        "product_img": "assets/pics/chathai.webp",
+        "product_name": "ชาเย็น",
+        "product_price": "50.00"
+    }
+]
