@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>โปรไฟล์</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+        rel="stylesheet">
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/profile.css" rel="stylesheet" type="text/css" />
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center min-h-550px h-100 align-items-center p-1">
+        <div class=" mt-2  h-100 w-100 w-md-550px  " style="border-radius: 5px;">
+            <div class="proflile-img">
+                <img id="profile_img"
+                    src="https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png">
+            </div>
+
+            <div class=" d-flex justify-content-center mt-6">
+                <span class=" fw-bolder " style="font-size: 30px;" id="lbl_name1">
+
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center ">
+                <span class=" fw-bolder fs-3">
+                    @<span id="lbl_name2"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center ">
+                <span class=" fw-bolder fs-3">
+                    สถานะ : <span id="lbl_status"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center ">
+                <span class=" fw-bolder fs-3">
+                    Device : <span id="lbl_device_name"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center align-items-center ">
+                <span class=" fw-bolder fs-3 align-items-center ">
+                    เข้ากลุ่ม OA : <span id="lbl_line_status"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center align-items-center ">
+                <span class=" fw-bolder fs-3 align-items-center ">
+                    Line version : <span id="lbl_line_ver"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center mt-5">
+                <span class=" fw-bolder " style="font-size: 24px;">
+                    99999 Follower
+                </span>
+            </div>
+
+
+            <div class=" d-flex justify-content-center mt-5 flex-column align-items-center">
+                <div class="w-75 d-flex align-items-center gap-2">
+                    <div class="w-75">
+                        <input class="form-control w-100 h-50px" id="txt_message" maxlength="50">
+                    </div>
+                    <div class="w-25 d-flex justify-content-center">
+                        <button class="btn btn-sm btn-info  h-50px w-100 fs-5 my-2" onclick="sendMessage()">
+                            ส่ง
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-primary w-75 h-50px fs-1 my-2" onclick="location.href='./products.html'">
+                    รายการสินค้า
+                </button>
+                <button class="btn btn-success w-75 h-50px fs-1 my-2" onclick="location.href='./order.html'">
+                    คำสั่งซื้อ
+                </button>
+                <button class="btn btn-danger w-75 h-50px fs-1 my-2 d-none" id="btn_logout" onclick="onlogOut()">
+                    ลงชื่อออก
+                </button>
+            </div>
+
+        </div>
+
+</body>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="./init.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let interval;
+        showLoading();
+        interval = setInterval(() => {
+            if (window.Profile) {
+                closeLoading();
+                //alert(JSON.stringify(window.Profile))
+                if (`${window.Profile.picture_url || ''}` != '') {
+                    $("#profile_img").attr("src", window.Profile.picture_url)
+                }
+                $("#lbl_name1").html(window.Profile.display_name)
+                $("#lbl_name2").html(window.Profile.display_name)
+                $("#lbl_status").html(window.Profile.status_message)
+                $("#btn_logout").removeClass("d-none")
+                $("#lbl_device_name").html(liff.getOS())
+                $("#lbl_line_ver").html(liff.getLineVersion() || '-')
+
+                //liff.permission.requestAll()
+
+                clearInterval(interval)
+
+                liff.permission.query("profile").then((permissionStatus) => {
+                    // permissionStatus = { state: 'granted' }
+                    // alert(JSON.stringify(permissionStatus))
+                });
+
+                liff.getFriendship().then((data) => {
+                    if (data.friendFlag) {
+                        $("#lbl_line_status").html("Active")
+                        $("#lbl_line_status").addClass("badge badge-success")
+
+
+
+                    } else {
+                        $("#lbl_line_status").html("InActive")
+                        $("#lbl_line_status").addClass("badge badge-danger")
+                    }
+                });
+
+
+            }
+        }, 1000);
+
+    });
+
+    function onlogOut() {
+        if (liff.isLoggedIn()) {
+            liff.logout();
+            setTimeout(function () {
+                if (liff.getOS() == 'web') {
+                    location.reload();
+                } else {
+                    liff.closeWindow();
+                }
+            }, 500)
+        }
+
+    }
+
+    function sendMessage() {
+        let message = `${$("#txt_message").val()}`.trim()
+        if (message == "") {
+            return false;
+        }
+        try {
+            showLoading();
+            liff.sendMessages([
+                {
+                    type: "text",
+                    text: message,
+                }
+            ])
+                .then(() => {
+                    showMessage('', 'ส่งข้อความสำเร็จ')
+                    $("#txt_message").val("");
+                })
+                .catch((err) => {
+                    showMessage('error', 'ส่งข้อความล้มเหลว')
+                });
+        } finally {
+            closeLoading();
+        }
+
+    }
+
+
+</script>
+
+</html>

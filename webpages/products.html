@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>สินค้า</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+        rel="stylesheet">
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/product.css" rel="stylesheet" type="text/css" />
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center min-h-550px h-100 align-items-center p-1">
+        <div class=" mt-2  h-100 w-100 w-md-550px " style="border-radius: 5px;">
+            <div class=" d-flex justify-content-center text-center bg-info  text-white fw-bolder"
+                style="font-size: 30px;">
+                รายการสินค้า
+            </div>
+            <div class="fw-bold fs-1"><a href="./profile.html" class="text-dark">หน้าหลัก</a></div>
+            <div class="product-box" id="product-box">
+
+            </div>
+
+            <div class="mt-5"></div>
+        </div>
+
+</body>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script src="./init.js"></script>
+
+<script>
+    let productList = [
+        {
+            "id": "1",
+            "product_img": "https://www.mos-th.com/wp-content/uploads/2021/08/Orange-Juice.png",
+            "product_name": "น้ำส้ม",
+            "product_price": "25.00"
+        },
+        {
+            "id": "2",
+            "product_img": "https://img.wongnai.com/p/1920x0/2022/06/24/727921c73f994f67a52d8f05c0eb5ad3.jpg",
+            "product_name": "กาแฟเย็น",
+            "product_price": "30.00"
+        },
+        {
+            "id": "3",
+            "product_img": "https://img.kapook.com/u/2021/wanwanat/1646050783.jpg",
+            "product_name": "ชาเขียว",
+            "product_price": "20.00"
+        }
+    ]
+
+
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get('id') || '';
+
+    productList.map(function (product) {
+
+        if (id == "") {
+            $("#product-box").append(`
+            <div class="proflile-img">
+                <img src="${product.product_img}">
+            </div>
+            <div class=" d-flex justify-content-center mt-6">
+                <span class=" fw-bolder " style="font-size: 30px;">
+                    ${product.product_name}
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center ">
+                <span class=" fw-bolder fs-3">
+                    ราคา : <span class="text-success">${product.product_price}</span>
+                </span>
+            </div>
+
+            <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
+                <button class="btn btn-primary w-75  fs-1 my-2">
+                    ซื้อเลย
+                </button>
+            </div>
+            <div class=" d-flex justify-content-center  gap-2 align-items-center">
+                <button class="btn btn-success w-75  fs-1 my-2" onclick="shareMessage(${product.id})">
+                    แชร์
+                </button>
+            </div>
+            <hr>
+        `)
+        } else {
+            if (product.id == id) {
+                $("#product-box").append(`
+                <div class="proflile-img">
+                    <img src="${product.product_img}">
+                </div>
+                <div class=" d-flex justify-content-center mt-6">
+                    <span class=" fw-bolder " style="font-size: 30px;">
+                        ${product.product_name}
+                    </span>
+                </div>
+                <div class=" d-flex justify-content-center ">
+                    <span class=" fw-bolder fs-3">
+                        ราคา : <span class="text-success">${product.product_price}</span>
+                    </span>
+                </div>
+    
+                <div class=" d-flex justify-content-center mt-5 gap-2 align-items-center">
+                    <button class="btn btn-primary w-75  fs-1 my-2">
+                        ซื้อเลย
+                    </button>
+                </div>
+                <hr>
+            `)
+            }
+        }
+
+    })
+
+
+    function shareMessage(id) {
+        let productData = productList.find(function (item) {
+            return item.id == id
+        })
+
+        if (!productData) {
+            return false;
+        }
+
+        const reqFlex = {
+            "type": "flex",
+            "altText": productData.product_name,
+            "contents": {
+                "type": "bubble",
+                "direction": "ltr",
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": productData.product_name,
+                            "align": "center"
+                        }
+                    ]
+                },
+                "hero": {
+                    "type": "image",
+                    "url": productData.product_img,
+                    "size": "full",
+                    "aspectRatio": "16:9"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": `ราคา : ${productData.product_price} บาท`,
+                            "align": "center"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "horizontal",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": "ซื้อตอนนี้",
+                                "uri": `${location.origin}/webpages/products.html?id=${productData.id}`
+                            },
+                            "style": "primary"
+                        }
+                    ]
+                }
+            }
+        }
+
+        liff.shareTargetPicker([
+            reqFlex
+        ],
+            {
+                isMultiple: true,
+            }
+        )
+            .then(function (res) {
+                if (res) {
+                    // succeeded in sending a message through TargetPicker
+                    console.log(`[${res.status}] Message sent!`);
+                    showMessage('', 'แชร์สำเร็จ')
+                } else {
+                    // sending message canceled
+                    console.log("TargetPicker was closed!");
+                }
+            })
+            .catch((err) => {
+                console.log("something wrong happen");
+                showMessage('error', 'เกิดข้อผิดพลาด')
+            });
+
+    }
+
+</script>
+
+</html>

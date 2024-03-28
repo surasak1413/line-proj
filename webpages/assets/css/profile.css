@@ -1,0 +1,22 @@
+.proflile-img {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.proflile-img img {
+    width: 135px;
+    height: 135px;
+    border: 10px solid #4cc764;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    font-family: 'Prompt', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 200 !important;
+}
