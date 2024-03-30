@@ -22,6 +22,9 @@ type TextMessage struct {
 	Emojis []Emoji `json:"emojis"`
 }
 
+/*
+Emoji อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/messaging-api/emoji-list/
+*/
 type Emoji struct {
 	Index     int    `json:"index"`
 	ProductID string `json:"productId"`
@@ -35,9 +38,23 @@ type StickerMessage struct {
 }
 
 type ImageMessage struct {
-	Type               string `json:"type"`
+	Type string `json:"type"`
+
+	/*
+		Image file URL (Max character limit: 2000) The URL should be percent-encoded using UTF-8,
+		Protocol: HTTPS (TLS 1.2 or later),
+		Image format: JPEG or PNG,
+		Max file size: 10 MB
+	*/
 	OriginalContentURL string `json:"originalContentUrl"`
-	PreviewImageURL    string `json:"previewImageUrl"`
+
+	/*
+		Image file URL (Max character limit: 2000) The URL should be percent-encoded using UTF-8,
+		Protocol: HTTPS (TLS 1.2 or later),
+		Image format: JPEG or PNG,
+		Max file size: 1 MB
+	*/
+	PreviewImageURL string `json:"previewImageUrl"`
 }
 
 type LocationMessage struct {

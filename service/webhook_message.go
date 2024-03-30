@@ -5,7 +5,9 @@ import (
 )
 
 const (
-	MessageTypeText = "text"
+	MessageTypeText    = "text"
+	MessageTypeSticker = "sticker"
+	MessageTypeImage   = "image"
 
 	UserCommandHelp  = "help"
 	UserCommandReply = "reply"
