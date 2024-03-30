@@ -9,20 +9,28 @@ import (
 )
 
 func MessagingAPIWebhook(ctx echo.Context) error {
+	if err := printRequestBody(ctx); err != nil {
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
 	req := new(request.MessagingAPIWebhookRequest)
 
 	if err := ctx.Bind(req); err != nil {
-		return ctx.String(http.StatusBadRequest, err.Error())
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
 	sv, err := service.New(ctx)
 	if err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
 	err = sv.MessagingAPIWebhook(*req)
 	if err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
 	return ctx.String(200, "success")

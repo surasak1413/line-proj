@@ -4,14 +4,14 @@ package request
 อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects
 */
 type MessagingAPIWebhookRequest struct {
-	Destination string   `json:"destination"`
-	Events      []Events `json:"events"`
+	Destination string  `json:"destination"`
+	Events      []Event `json:"events"`
 }
 
 /*
 อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#message-event
 */
-type Events struct {
+type Event struct {
 	Type            string          `json:"type"`
 	Message         Message         `json:"message"`
 	Timestamp       int64           `json:"timestamp"`

@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"io"
 	"line-proj/config"
 	"line-proj/util"
@@ -12,11 +13,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	ErrSignatureHeaderMissing = "header x-line-signature is missing"
-	ErrInvalidSignature       = "invalid signature"
+var (
+	ErrSignatureHeaderMissing = errors.New("header x-line-signature is missing")
+	ErrInvalidSignature       = errors.New("invalid signature")
 )
 
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/messaging-api/receiving-messages/#verify-signature
+*/
 func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		defer ctx.Request().Body.Close()
@@ -28,11 +32,11 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 
 		signature := ctx.Request().Header.Get("x-line-signature")
 		if util.IsEmptyString(signature) {
-			return ctx.String(http.StatusInternalServerError, ErrSignatureHeaderMissing)
+			return ctx.String(http.StatusInternalServerError, ErrSignatureHeaderMissing.Error())
 		}
 
 		if !ValidateSignature(config.Line.LineChannelSecret, signature, body) {
-			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature)
+			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature.Error())
 		}
 
 		return nil
