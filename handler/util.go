@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 
@@ -12,6 +13,12 @@ func printRequestBody(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	if err := ctx.Request().Body.Close(); err != nil {
+		return err
+	}
+
+	ctx.Request().Body = io.NopCloser(bytes.NewBuffer(body))
 
 	var jsonData interface{}
 	if err := json.Unmarshal(body, &jsonData); err != nil {
