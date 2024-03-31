@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -23,15 +24,16 @@ var (
 */
 func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		reader, err := ctx.Request().GetBody()
+		body, err := io.ReadAll(ctx.Request().Body)
 		if err != nil {
 			return ctx.String(http.StatusInternalServerError, err.Error())
 		}
 
-		body, err := io.ReadAll(reader)
-		if err != nil {
+		if err := ctx.Request().Body.Close(); err != nil {
 			return ctx.String(http.StatusInternalServerError, err.Error())
 		}
+
+		ctx.Request().Body = io.NopCloser(bytes.NewBuffer(body))
 
 		signature := ctx.Request().Header.Get("x-line-signature")
 		if util.IsEmptyString(signature) {
