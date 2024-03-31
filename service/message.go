@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+	"line-proj/instance"
 	"line-proj/line_api"
 	"line-proj/request"
 )
@@ -24,7 +26,7 @@ func (sv *service) ExampleReplyMessage(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExamplePushMessage(event request.Event) error {
+func (sv *service) ExamplePushMessageText(event request.Event) error {
 	body := line_api.PushMessageRequest{
 		To: event.Source.UserID,
 		Messages: []interface{}{
@@ -51,12 +53,42 @@ func (sv *service) ExamplePushMessage(event request.Event) error {
 					},
 				},
 			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessageSticker(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
 			// ตัวอย่างการส่ง sticker
 			line_api.StickerMessage{
 				Type:      MessageTypeSticker,
 				PackageID: "11539",
 				StickerID: "52114110",
 			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessageImage(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
 			// ตัวอย่างการส่งภาพ
 			line_api.ImageMessage{
 				Type:               MessageTypeImage,
@@ -67,6 +99,117 @@ func (sv *service) ExamplePushMessage(event request.Event) error {
 	}
 
 	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessageVideo(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			// ตัวอย่างการส่งวิดีโอ
+			line_api.VideoMessage{
+				Type:               MessageTypeVideo,
+				OriginalContentURL: "https://store14.gofile.io/download/web/051c42b9-a0f0-425e-b1c5-7b78fde8d19e/6394054-sd_426_214_24fps.mp4",
+				PreviewImageURL:    "https://picsum.photos/426/214",
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessageLocation(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			// ตัวอย่างการส่ง location
+			line_api.LocationMessage{
+				Type:      MessageTypeLocation,
+				Title:     "my location",
+				Address:   "1-3 Kioicho, Chiyoda-ku, Tokyo, 102-8282, Japan",
+				Latitude:  35.67966,
+				Longitude: 139.73669,
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessageTemplate(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			// ตัวอย่างการส่ง template
+			line_api.TemplateMessage{
+				Type: MessageTypeTemplate,
+				// TODO
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExampleMulticastMessage(event request.Event) error {
+	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
+	if err != nil {
+		return err
+	}
+
+	body := line_api.MulticastMessageRequest{
+		To: instance.FollowerUserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: fmt.Sprintf("Welcome %s to LINE OA (multicast)", userProfile.DisplayName),
+			},
+		},
+	}
+
+	if err := line_api.MulticastMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExampleBoardcastMessage(event request.Event) error {
+	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
+	if err != nil {
+		return err
+	}
+
+	body := line_api.BoardcastMessageRequest{
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: fmt.Sprintf("Welcome %s to LINE OA (boardcast)", userProfile.DisplayName),
+			},
+		},
+	}
+
+	if err := line_api.BoardcastMessage(body); err != nil {
 		return err
 	}
 

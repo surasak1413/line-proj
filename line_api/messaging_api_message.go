@@ -39,3 +39,35 @@ func PushMessage(body PushMessageRequest) error {
 
 	return nil
 }
+
+func MulticastMessage(body MulticastMessageRequest) error {
+	resp, err := resty.New().R().
+		SetAuthToken(config.Line.LineChannelAccessToken).
+		SetBody(body).
+		Post("https://api.line.me/v2/bot/message/multicast")
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return fmt.Errorf("%d : %s", resp.StatusCode(), string(resp.Body()))
+	}
+
+	return nil
+}
+
+func BoardcastMessage(body BoardcastMessageRequest) error {
+	resp, err := resty.New().R().
+		SetAuthToken(config.Line.LineChannelAccessToken).
+		SetBody(body).
+		Post("https://api.line.me/v2/bot/message/broadcast")
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return fmt.Errorf("%d : %s", resp.StatusCode(), string(resp.Body()))
+	}
+
+	return nil
+}

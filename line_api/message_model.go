@@ -1,21 +1,8 @@
 package line_api
 
 /*
-โครงสร้างของ object ของแต่ละ type จะมีความแตกต่างกัน
-อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#message-objects
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#text-message
 */
-
-type ReplyMessageRequest struct {
-	ReplyToken string        `json:"replyToken"`
-	Messages   []interface{} `json:"messages"`
-}
-
-type PushMessageRequest struct {
-	To       string        `json:"to"` // userId, groupId หรือ roomId
-	Messages []interface{} `json:"messages"`
-}
-
-// สูงสุด 5
 type TextMessage struct {
 	Type   string  `json:"type"`
 	Text   string  `json:"text"`
@@ -31,12 +18,18 @@ type Emoji struct {
 	EmojiID   string `json:"emojiId"`
 }
 
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#sticker-message
+*/
 type StickerMessage struct {
 	Type      string `json:"type"`
 	PackageID string `json:"packageId"`
 	StickerID string `json:"stickerId"`
 }
 
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#image-message
+*/
 type ImageMessage struct {
 	Type string `json:"type"`
 
@@ -57,6 +50,34 @@ type ImageMessage struct {
 	PreviewImageURL string `json:"previewImageUrl"`
 }
 
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#video-message
+*/
+type VideoMessage struct {
+	Type string `json:"type"`
+
+	/*
+		Video file URL (Max character limit: 2000)
+		Protocol: HTTPS (TLS 1.2 or later)
+		Video format: mp4
+		Max file size: 200 MB
+	*/
+	OriginalContentURL string `json:"originalContentUrl"`
+
+	/*
+		Image file URL (Max character limit: 2000) The URL should be percent-encoded using UTF-8,
+		Protocol: HTTPS (TLS 1.2 or later),
+		Image format: JPEG or PNG,
+		Max file size: 1 MB
+	*/
+	PreviewImageURL string `json:"previewImageUrl"`
+
+	TrackingID string `json:"trackingId"`
+}
+
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#location-message
+*/
 type LocationMessage struct {
 	Type      string  `json:"type"`
 	Title     string  `json:"title"`
@@ -65,6 +86,13 @@ type LocationMessage struct {
 	Longitude float64 `json:"longitude"`
 }
 
-// TODO template
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#template-messages
+*/
+type TemplateMessage struct {
+	Type     string      `json:"type"`
+	AltText  string      `json:"altText"`
+	Template interface{} `json:"template"` // template_model.go
+}
 
 // TODO flex
