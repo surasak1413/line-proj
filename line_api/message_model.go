@@ -95,4 +95,8 @@ type TemplateMessage struct {
 	Template interface{} `json:"template"` // template_model.go
 }
 
-// TODO flex
+type FlexMessage struct {
+	Type     string       `json:"type"` // Type of the message, e.g., "flex"
+	AltText  string       `json:"altText"`
+	Contents FlexContents `json:"contents"`
+}

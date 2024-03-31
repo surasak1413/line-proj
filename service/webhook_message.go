@@ -85,6 +85,10 @@ func (sv *service) InteractWithUserCommand(event request.Event) error {
 		if err := sv.ExampleBroadcastMessage(event); err != nil {
 			return err
 		}
+	case "flex":
+		if err := sv.ExamplePushFlexBoxUserCommand(event); err != nil {
+			return err
+		}
 	}
 
 	return nil

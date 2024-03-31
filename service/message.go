@@ -235,3 +235,139 @@ func (sv *service) ExampleBroadcastMessage(event request.Event) error {
 
 	return nil
 }
+
+func (sv *service) ExamplePushFlexBoxUserCommand(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.FlexMessage{
+				Type:    "flex",
+				AltText: "Cafe",
+				Contents: line_api.FlexContents{
+					Type: "bubble",
+					Hero: &line_api.FlexHero{
+						Type:        "image",
+						URL:         "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+						Size:        "full",
+						AspectRatio: "20:13",
+						AspectMode:  "cover",
+						Action: line_api.FlexAction{
+							Type: "uri",
+							URI:  "http://linecorp.com",
+						},
+					},
+					Body: line_api.FlexBody{
+						Type:   "box",
+						Layout: "vertical",
+						Contents: []line_api.FlexBlock{
+							{
+								Type:   "text",
+								Text:   "Brown Cafe",
+								Weight: "bold",
+								Size:   "xl",
+							},
+							{
+								Type:   "box",
+								Layout: "baseline",
+								Margin: "md",
+								Contents: []line_api.FlexBlock{
+									{
+										Type: "icon",
+										Size: "sm",
+										URL:  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+									},
+									{
+										Type: "icon",
+										Size: "sm",
+										URL:  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+									},
+									{
+										Type: "icon",
+										Size: "sm",
+										URL:  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+									},
+									{
+										Type: "icon",
+										Size: "sm",
+										URL:  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+									},
+									{
+										Type: "icon",
+										Size: "sm",
+										URL:  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
+									},
+									{
+										Type:   "text",
+										Text:   "4.0",
+										Size:   "sm",
+										Color:  "#999999",
+										Margin: "md",
+									},
+								},
+							},
+							{
+								Type:    "box",
+								Layout:  "vertical",
+								Margin:  "lg",
+								Spacing: "sm",
+								Contents: []line_api.FlexBlock{
+									{
+										Type:    "box",
+										Layout:  "baseline",
+										Spacing: "sm",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "Place",
+												Color: "#aaaaaa",
+												Size:  "sm",
+												Flex:  1,
+											},
+											{
+												Type:  "text",
+												Text:  "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
+												Wrap:  true,
+												Color: "#666666",
+												Size:  "sm",
+												Flex:  5,
+											},
+										},
+									},
+									{
+										Type:    "box",
+										Layout:  "baseline",
+										Spacing: "sm",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "Time",
+												Color: "#aaaaaa",
+												Size:  "sm",
+												Flex:  1,
+											},
+											{
+												Type:  "text",
+												Text:  "10:00 - 23:00",
+												Wrap:  true,
+												Color: "#666666",
+												Size:  "sm",
+												Flex:  5,
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
