@@ -44,7 +44,7 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature.Error())
 		}
 
-		return nil
+		return next(ctx)
 	}
 }
 

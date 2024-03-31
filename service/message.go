@@ -112,8 +112,8 @@ func (sv *service) ExamplePushMessageImage(event request.Event) error {
 			// ตัวอย่างการส่งภาพ
 			line_api.ImageMessage{
 				Type:               MessageTypeImage,
-				OriginalContentURL: "https://picsum.photos/1000",
-				PreviewImageURL:    "https://picsum.photos/300",
+				OriginalContentURL: "https://superrich-exchange-dev-media.s3.ap-southeast-1.amazonaws.com/employee/profile/20231124/2Yc6V6TYa8sZpmorRxiLUPD1ynt.jpeg",
+				PreviewImageURL:    "https://superrich-exchange-dev-media.s3.ap-southeast-1.amazonaws.com/employee/profile/20231124/2Yc6V6TYa8sZpmorRxiLUPD1ynt.jpeg",
 			},
 		},
 	}
