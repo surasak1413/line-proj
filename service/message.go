@@ -5,7 +5,27 @@ import (
 	"line-proj/instance"
 	"line-proj/line_api"
 	"line-proj/request"
+	"strings"
 )
+
+func (sv *service) ExamplePushMessageAllUserCommand(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: strings.Join(AllUserCommand, ", "),
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func (sv *service) ExampleReplyMessage(event request.Event) error {
 	body := line_api.ReplyMessageRequest{
@@ -193,23 +213,23 @@ func (sv *service) ExampleMulticastMessage(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExampleBoardcastMessage(event request.Event) error {
+func (sv *service) ExampleBroadcastMessage(event request.Event) error {
 	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
 	if err != nil {
 		return err
 	}
 
-	body := line_api.BoardcastMessageRequest{
+	body := line_api.BroadcastMessageRequest{
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.TextMessage{
 				Type: MessageTypeText,
-				Text: fmt.Sprintf("Welcome %s to LINE OA (boardcast)", userProfile.DisplayName),
+				Text: fmt.Sprintf("Welcome %s to LINE OA (broadcast)", userProfile.DisplayName),
 			},
 		},
 	}
 
-	if err := line_api.BoardcastMessage(body); err != nil {
+	if err := line_api.BroadcastMessage(body); err != nil {
 		return err
 	}
 

@@ -2,6 +2,7 @@ package service
 
 import (
 	"line-proj/request"
+	"strings"
 )
 
 const (
@@ -20,8 +21,20 @@ const (
 	UserCommandPushVideo    = "push_video"
 	UserCommandPushLocation = "push_location"
 	UserCommandMulticast    = "multicast"
-	UserCommandBoardcast    = "boardcast"
+	UserCommandBroadcast    = "broadcast"
 )
+
+var AllUserCommand = []string{
+	UserCommandHelp,
+	UserCommandReply,
+	UserCommandPushText,
+	UserCommandPushSticker,
+	UserCommandPushImage,
+	UserCommandPushVideo,
+	UserCommandPushLocation,
+	UserCommandMulticast,
+	UserCommandBroadcast,
+}
 
 func (sv *service) WebHookActionTypeMessage(event request.Event) error {
 	switch event.Message.Type {
@@ -35,9 +48,11 @@ func (sv *service) WebHookActionTypeMessage(event request.Event) error {
 }
 
 func (sv *service) InteractWithUserCommand(event request.Event) error {
-	switch event.Message.Text {
+	switch strings.TrimSpace(strings.ToLower(event.Message.Text)) {
 	case UserCommandHelp:
-		// TODO
+		if err := sv.ExamplePushMessageAllUserCommand(event); err != nil {
+			return err
+		}
 	case UserCommandReply:
 		if err := sv.ExampleReplyMessage(event); err != nil {
 			return err
@@ -66,8 +81,8 @@ func (sv *service) InteractWithUserCommand(event request.Event) error {
 		if err := sv.ExampleMulticastMessage(event); err != nil {
 			return err
 		}
-	case UserCommandBoardcast:
-		if err := sv.ExampleBoardcastMessage(event); err != nil {
+	case UserCommandBroadcast:
+		if err := sv.ExampleBroadcastMessage(event); err != nil {
 			return err
 		}
 	}

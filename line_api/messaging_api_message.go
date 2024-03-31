@@ -56,7 +56,7 @@ func MulticastMessage(body MulticastMessageRequest) error {
 	return nil
 }
 
-func BoardcastMessage(body BoardcastMessageRequest) error {
+func BroadcastMessage(body BroadcastMessageRequest) error {
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineChannelAccessToken).
 		SetBody(body).

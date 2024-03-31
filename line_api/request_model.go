@@ -24,6 +24,6 @@ type MulticastMessageRequest struct {
 }
 
 // ส่ง message ไปยังทุกคนที่ add LINE OA
-type BoardcastMessageRequest struct {
+type BroadcastMessageRequest struct {
 	Messages []interface{} `json:"messages"` // สูงสุด 5 object, message_model.go
 }
