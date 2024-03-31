@@ -133,8 +133,8 @@ func (sv *service) ExamplePushMessageVideo(event request.Event) error {
 			// ตัวอย่างการส่งวิดีโอ
 			line_api.VideoMessage{
 				Type:               MessageTypeVideo,
-				OriginalContentURL: "https://store14.gofile.io/download/web/051c42b9-a0f0-425e-b1c5-7b78fde8d19e/6394054-sd_426_214_24fps.mp4",
-				PreviewImageURL:    "https://picsum.photos/426/214",
+				OriginalContentURL: "https://superrich-exchange-dev-media.s3.ap-southeast-1.amazonaws.com/company/profile/20240331/2eST7DDttdTODk3yNRXbDKjpslq.mp4",
+				PreviewImageURL:    "https://superrich-exchange-dev-media.s3.ap-southeast-1.amazonaws.com/employee/profile/20231124/2Yc6V6TYa8sZpmorRxiLUPD1ynt.jpeg",
 			},
 		},
 	}
