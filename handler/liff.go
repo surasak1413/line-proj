@@ -3,6 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"line-proj/line_api"
+	"line-proj/service"
 	"net/http"
 	"os"
 	"sort"
@@ -29,6 +31,20 @@ func BuyProductsAPI(ctx echo.Context) error {
 
 	if err := writeJSONToFile(req); err != nil {
 		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
+	body := line_api.PushMessageRequest{
+		To: req.UserId,
+		Messages: []interface{}{
+			line_api.TextMessage{
+				Type: service.MessageTypeText,
+				Text: fmt.Sprintf("Product ID: %s", req.ProductName),
+			},
+		},
+	}
+
+	if err := line_api.PushMessage(body); err != nil {
+		return err
 	}
 
 	return ctx.JSON(200, "success")
