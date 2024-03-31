@@ -22,6 +22,7 @@ const (
 	UserCommandPushLocation = "push_location"
 	UserCommandMulticast    = "multicast"
 	UserCommandBroadcast    = "broadcast"
+	UserCommandFlexBox      = "flex_box"
 )
 
 var AllUserCommand = []string{
@@ -34,6 +35,7 @@ var AllUserCommand = []string{
 	UserCommandPushLocation,
 	UserCommandMulticast,
 	UserCommandBroadcast,
+	UserCommandFlexBox,
 }
 
 func (sv *service) WebHookActionTypeMessage(event request.Event) error {
@@ -85,7 +87,7 @@ func (sv *service) InteractWithUserCommand(event request.Event) error {
 		if err := sv.ExampleBroadcastMessage(event); err != nil {
 			return err
 		}
-	case "flex":
+	case UserCommandFlexBox:
 		if err := sv.ExamplePushFlexBoxUserCommand(event); err != nil {
 			return err
 		}

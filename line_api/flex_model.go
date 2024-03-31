@@ -63,6 +63,7 @@ type FlexBlock struct {
 	Spacing  string      `json:"spacing,omitempty"`
 	Size     string      `json:"size,omitempty"`
 	Color    string      `json:"color,omitempty"`
+	Align    string      `json:"align,omitempty"`
 	Flex     int         `json:"flex,omitempty"`
 }
 

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"line-proj/line_api"
-	"line-proj/service"
 	"net/http"
 	"os"
 	"sort"
@@ -36,9 +35,156 @@ func BuyProductsAPI(ctx echo.Context) error {
 	body := line_api.PushMessageRequest{
 		To: req.UserId,
 		Messages: []interface{}{
-			line_api.TextMessage{
-				Type: service.MessageTypeText,
-				Text: fmt.Sprintf("Product ID: %s", req.ProductName),
+			line_api.FlexMessage{
+				Type:    "flex",
+				AltText: "ใบเสร็จ",
+				Contents: line_api.FlexContents{
+					Type: "bubble",
+					Body: line_api.FlexBody{
+						Type:   "box",
+						Layout: "vertical",
+						Contents: []line_api.FlexBlock{
+							{
+								Type:   "text",
+								Text:   "ใบเสร็จ",
+								Weight: "bold",
+								Color:  "#2d5de6",
+								Size:   "sm",
+							},
+							{
+								Type:   "text",
+								Text:   "Gec Cafe",
+								Weight: "bold",
+								Size:   "xxl",
+								Margin: "md",
+							},
+							{
+								Type:  "text",
+								Text:  "989 Room A2, A2/1, B1, B2, Siam Piwat Tower, 16th Fl., Rama 1 Road, Pathumwan, Pathumwan, Bangkok 10330",
+								Size:  "xs",
+								Color: "#aaaaaa",
+								Wrap:  true,
+							},
+							{
+								Type:   "separator",
+								Margin: "xxl",
+							},
+							{
+								Type:    "box",
+								Layout:  "vertical",
+								Margin:  "xxl",
+								Spacing: "sm",
+								Contents: []line_api.FlexBlock{
+									{
+										Type:   "box",
+										Layout: "horizontal",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  req.ProductName,
+												Size:  "sm",
+												Color: "#555555",
+												Flex:  0,
+											},
+											{
+												Type:  "text",
+												Text:  fmt.Sprintf("฿%s", req.ProductPrice),
+												Size:  "sm",
+												Color: "#111111",
+												Align: "end",
+											},
+										},
+									},
+									{
+										Type:   "separator",
+										Margin: "xxl",
+									},
+									{
+										Type:   "box",
+										Layout: "horizontal",
+										Margin: "xxl",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "ITEMS",
+												Size:  "sm",
+												Color: "#555555",
+											},
+											{
+												Type:  "text",
+												Text:  "1",
+												Size:  "sm",
+												Color: "#111111",
+												Align: "end",
+											},
+										},
+									},
+									{
+										Type:   "box",
+										Layout: "horizontal",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "TOTAL",
+												Size:  "sm",
+												Color: "#555555",
+											},
+											{
+												Type:  "text",
+												Text:  fmt.Sprintf("฿%s", req.ProductPrice),
+												Size:  "sm",
+												Color: "#111111",
+												Align: "end",
+											},
+										},
+									},
+									{
+										Type:   "box",
+										Layout: "horizontal",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "Transfer",
+												Size:  "sm",
+												Color: "#555555",
+											},
+											{
+												Type:  "text",
+												Text:  fmt.Sprintf("฿%s", req.ProductPrice),
+												Size:  "sm",
+												Color: "#111111",
+												Align: "end",
+											},
+										},
+									},
+									{
+										Type:   "box",
+										Layout: "horizontal",
+										Contents: []line_api.FlexBlock{
+											{
+												Type:  "text",
+												Text:  "CHANGE",
+												Size:  "sm",
+												Color: "#555555",
+											},
+											{
+												Type:  "text",
+												Text:  "฿0.00",
+												Size:  "sm",
+												Color: "#111111",
+												Align: "end",
+											},
+										},
+									},
+								},
+							},
+							{
+								Type:   "separator",
+								Margin: "xxl",
+							},
+						},
+					},
+				},
 			},
 		},
 	}
