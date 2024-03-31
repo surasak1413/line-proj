@@ -23,9 +23,12 @@ var (
 */
 func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		defer ctx.Request().Body.Close()
+		reader, err := ctx.Request().GetBody()
+		if err != nil {
+			return ctx.String(http.StatusInternalServerError, err.Error())
+		}
 
-		body, err := io.ReadAll(ctx.Request().Body)
+		body, err := io.ReadAll(reader)
 		if err != nil {
 			return ctx.String(http.StatusInternalServerError, err.Error())
 		}
