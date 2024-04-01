@@ -20,6 +20,7 @@ type Event struct {
 	Mode            string          `json:"mode"`
 	WebhookEventID  string          `json:"webhookEventId"`
 	DeliveryContext DeliveryContext `json:"deliveryContext"`
+	Postback        Postback        `json:"postback"`
 }
 
 /*
@@ -46,4 +47,21 @@ type Source struct {
 */
 type DeliveryContext struct {
 	IsRedelivery bool `json:"isRedelivery"`
+}
+
+/*
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#postback-event
+*/
+type Postback struct {
+	Data   string `json:"data"`
+	Params Params `json:"params"`
+}
+
+type Params struct {
+	// date-time selection action
+	Datetime string `json:"datetime"`
+
+	// rich menu switch action
+	NewRichMenuAliasID string `json:"newRichMenuAliasId"`
+	Status             string `json:"status"`
 }

@@ -169,15 +169,42 @@ func (sv *service) ExamplePushMessageLocation(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExamplePushMessageTemplate(event request.Event) error {
+func (sv *service) ExamplePushMessageTemplateButtons(event request.Event) error {
 	body := line_api.PushMessageRequest{
 		To: event.Source.UserID,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่ง template
 			line_api.TemplateMessage{
-				Type: MessageTypeTemplate,
-				// TODO
+				Type:    MessageTypeTemplate,
+				AltText: "push buttons template",
+				Template: line_api.ButtonsTemplate{
+					Type:                 TemplateTypeButtons,
+					ThumbnailImageURL:    "https://picsum.photos/500",
+					ImageAspectRatio:     ImageAspectRatioSquare,
+					ImageSize:            ImageSizeContain,
+					ImageBackgroundColor: "#FFFFFF",
+					Title:                "Title example",
+					Text:                 "Text example",
+					DefaultAction: line_api.MessageAction{
+						Type:  ActionTypeMessage,
+						Label: "Default message action label",
+						Text:  "Default message action text",
+					},
+					Actions: []interface{}{
+						// สูงสุด 5 object
+						line_api.MessageAction{
+							Type:  ActionTypeMessage,
+							Label: "Message action",
+							Text:  "user trigger message action",
+						},
+						line_api.URIAction{
+							Type:  ActionTypeURI,
+							Label: "URI action",
+							URI:   "https://www.google.co.th/",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -189,60 +216,50 @@ func (sv *service) ExamplePushMessageTemplate(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExampleMulticastMessage(event request.Event) error {
-	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
-	if err != nil {
-		return err
-	}
-
-	body := line_api.MulticastMessageRequest{
-		To: instance.FollowerUserID,
+func (sv *service) ExamplePushMessageTemplateConfirm(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
 		Messages: []interface{}{
 			// สูงสุด 5 message
-			line_api.TextMessage{
-				Type: MessageTypeText,
-				Text: fmt.Sprintf("Welcome %s to LINE OA (multicast)", userProfile.DisplayName),
+			// ตัวอย่างการส่ง template
+			line_api.TemplateMessage{
+				Type:    MessageTypeTemplate,
+				AltText: "push confirm template",
+				Template: line_api.ConfirmTemplate{
+					Type: TemplateTypeConfirm,
+					Text: "Display text",
+					Actions: []interface{}{
+						// 2 object เท่านั้น
+						line_api.PostbackAction{
+							Type:  ActionTypePostback,
+							Label: "Confirm",
+							Data:  "confirm_data",
+						},
+						line_api.PostbackAction{
+							Type:  ActionTypePostback,
+							Label: "Cancel",
+							Data:  "cancel_data",
+						},
+					},
+				},
 			},
 		},
 	}
 
-	if err := line_api.MulticastMessage(body); err != nil {
+	if err := line_api.PushMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExampleBroadcastMessage(event request.Event) error {
-	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
-	if err != nil {
-		return err
-	}
-
-	body := line_api.BroadcastMessageRequest{
-		Messages: []interface{}{
-			// สูงสุด 5 message
-			line_api.TextMessage{
-				Type: MessageTypeText,
-				Text: fmt.Sprintf("Welcome %s to LINE OA (broadcast)", userProfile.DisplayName),
-			},
-		},
-	}
-
-	if err := line_api.BroadcastMessage(body); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (sv *service) ExamplePushFlexBoxUserCommand(event request.Event) error {
+func (sv *service) ExamplePushMessageFlex(event request.Event) error {
 	body := line_api.PushMessageRequest{
 		To: event.Source.UserID,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.FlexMessage{
-				Type:    "flex",
+				Type:    MessageTypeFlex,
 				AltText: "Cafe",
 				Contents: line_api.FlexContents{
 					Type: "bubble",
@@ -366,6 +383,53 @@ func (sv *service) ExamplePushFlexBoxUserCommand(event request.Event) error {
 	}
 
 	if err := line_api.PushMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExampleMulticastMessage(event request.Event) error {
+	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
+	if err != nil {
+		return err
+	}
+
+	body := line_api.MulticastMessageRequest{
+		To: instance.FollowerUserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: fmt.Sprintf("Welcome %s to LINE OA (multicast)", userProfile.DisplayName),
+			},
+		},
+	}
+
+	if err := line_api.MulticastMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExampleBroadcastMessage(event request.Event) error {
+	userProfile, err := line_api.GetUserProfileByUserID(event.Source.UserID)
+	if err != nil {
+		return err
+	}
+
+	body := line_api.BroadcastMessageRequest{
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: fmt.Sprintf("Welcome %s to LINE OA (broadcast)", userProfile.DisplayName),
+			},
+		},
+	}
+
+	if err := line_api.BroadcastMessage(body); err != nil {
 		return err
 	}
 
