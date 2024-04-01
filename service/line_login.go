@@ -3,13 +3,17 @@ package service
 import (
 	"fmt"
 	"line-proj/config"
+	"line-proj/line_api"
+	"line-proj/response"
 	"net/http"
 	"net/url"
 )
 
 type lineLoginAction interface {
 	LineLoginGetAuthPage() (*string, error)
-	LineLoginCallback(code, state string) error
+	LineLoginCallback(code, state string) (*response.LineUserProfileWithTokenResponse, error)
+	LineLoginRefreshToken(refreshToken string) (*response.LineUserProfileWithTokenResponse, error)
+	LineLoginGetUserProfile(accessToken string) (*response.LineProfileResponse, error)
 }
 
 /*
@@ -44,12 +48,80 @@ func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	return &url, nil
 }
 
-func (sv *service) LineLoginCallback(code, state string) error {
+func (sv *service) LineLoginCallback(code, state string) (*response.LineUserProfileWithTokenResponse, error) {
 	// check state process
 	// TODO implement
 
 	// get access token
-	// TODO
+	token, err := line_api.LineLoginIssueAccessToken(fmt.Sprintf("%s/v1/login/callback", config.App.ServerURL), code)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil
+	// get profile
+	userProfile, err := line_api.LineLoginGetUserProfile(token.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := response.LineUserProfileWithTokenResponse{
+		DisplayName:   userProfile.DisplayName,
+		UserID:        userProfile.UserID,
+		PictureURL:    userProfile.PictureURL,
+		StatusMessage: userProfile.StatusMessage,
+		AccessToken:   token.AccessToken,
+		ExpiresIn:     token.ExpiresIn,
+		RefreshToken:  token.RefreshToken,
+	}
+
+	return &resp, nil
+}
+
+func (sv *service) LineLoginRefreshToken(refreshToken string) (*response.LineUserProfileWithTokenResponse, error) {
+	// check state process
+	// TODO implement
+
+	// get access token
+	token, err := line_api.LineLoginRefreshToken(refreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	// get profile
+	userProfile, err := line_api.LineLoginGetUserProfile(token.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := response.LineUserProfileWithTokenResponse{
+		DisplayName:   userProfile.DisplayName,
+		UserID:        userProfile.UserID,
+		PictureURL:    userProfile.PictureURL,
+		StatusMessage: userProfile.StatusMessage,
+		AccessToken:   token.AccessToken,
+		ExpiresIn:     token.ExpiresIn,
+		RefreshToken:  token.RefreshToken,
+	}
+
+	return &resp, nil
+}
+
+func (sv *service) LineLoginGetUserProfile(accessToken string) (*response.LineProfileResponse, error) {
+	// check state process
+	// TODO implement
+
+	// get profile
+	userProfile, err := line_api.LineLoginGetUserProfile(accessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := response.LineProfileResponse{
+		DisplayName:   userProfile.DisplayName,
+		UserID:        userProfile.UserID,
+		PictureURL:    userProfile.PictureURL,
+		StatusMessage: userProfile.StatusMessage,
+	}
+
+	return &resp, nil
 }

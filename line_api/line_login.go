@@ -10,7 +10,7 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-type TokenResponse struct {
+type IssueAccessTokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int    `json:"expires_in"`
 	IDToken      string `json:"id_token"`
@@ -24,7 +24,7 @@ type TokenResponse struct {
 	TokenType string `json:"token_type"`
 }
 
-func LineLoginGetAccessToken(redirectURL, code string) (*TokenResponse, error) {
+func LineLoginIssueAccessToken(redirectURL, code string) (*IssueAccessTokenResponse, error) {
 	queryParams := url.Values{}
 	queryParams.Set("grant_type", "authorization_code")
 	queryParams.Set("code", code)
@@ -43,7 +43,70 @@ func LineLoginGetAccessToken(redirectURL, code string) (*TokenResponse, error) {
 		return nil, fmt.Errorf("%d : %s", resp.StatusCode(), string(resp.Body()))
 	}
 
-	var respData TokenResponse
+	var respData IssueAccessTokenResponse
+	err = json.Unmarshal(resp.Body(), &respData)
+	if err != nil {
+		return nil, err
+	}
+
+	return &respData, nil
+}
+
+type RefreshTokenResponse struct {
+	TokenType    string `json:"token_type"`
+	Scope        string `json:"scope"`
+	AccessToken  string `json:"access_token"`
+	ExpiresIn    int    `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+func LineLoginRefreshToken(refreshToken string) (*RefreshTokenResponse, error) {
+	queryParams := url.Values{}
+	queryParams.Set("grant_type", "refresh_token")
+	queryParams.Set("refresh_token", refreshToken)
+	queryParams.Set("client_id", config.Line.LineChannelID)
+	queryParams.Set("client_secret", config.Line.LineChannelSecret)
+
+	resp, err := resty.New().R().
+		SetQueryParamsFromValues(queryParams).
+		Post("https://api.line.me/oauth2/v2.1/token")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("%d : %s", resp.StatusCode(), string(resp.Body()))
+	}
+
+	var respData RefreshTokenResponse
+	err = json.Unmarshal(resp.Body(), &respData)
+	if err != nil {
+		return nil, err
+	}
+
+	return &respData, nil
+}
+
+type GetUserProfileResponse struct {
+	UserID        string `json:"userId"`
+	DisplayName   string `json:"displayName"`
+	PictureURL    string `json:"pictureUrl"`
+	StatusMessage string `json:"statusMessage"`
+}
+
+func LineLoginGetUserProfile(accessToken string) (*GetUserProfileResponse, error) {
+	resp, err := resty.New().R().
+		SetAuthToken(accessToken).
+		Get("https://api.line.me/v2/profile")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("%d : %s", resp.StatusCode(), string(resp.Body()))
+	}
+
+	var respData GetUserProfileResponse
 	err = json.Unmarshal(resp.Body(), &respData)
 	if err != nil {
 		return nil, err

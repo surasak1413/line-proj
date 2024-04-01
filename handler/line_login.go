@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"errors"
 	"line-proj/service"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -33,11 +35,75 @@ func LineLoginCallback(ctx echo.Context) error {
 		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
-	err = sv.LineLoginCallback(code, state)
+	resp, err := sv.LineLoginCallback(code, state)
 	if err != nil {
 		ctx.Logger().Error(err)
 		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.String(200, "success")
+	return ctx.JSON(200, resp)
+}
+
+func LineLoginRefreshToken(ctx echo.Context) error {
+	authHeader := ctx.Request().Header.Get("Authorization")
+	if authHeader == "" {
+		err := errors.New("Unauthorized")
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusUnauthorized, err.Error())
+	}
+
+	tokenParts := strings.Split(authHeader, " ")
+	if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
+		err := errors.New("Unauthorized")
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusUnauthorized, err.Error())
+	}
+
+	token := tokenParts[1]
+
+	sv, err := service.New(ctx)
+	if err != nil {
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
+	resp, err := sv.LineLoginRefreshToken(token)
+	if err != nil {
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(200, resp)
+}
+
+func LineLoginGetUserProfile(ctx echo.Context) error {
+	authHeader := ctx.Request().Header.Get("Authorization")
+	if authHeader == "" {
+		err := errors.New("Unauthorized")
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusUnauthorized, err.Error())
+	}
+
+	tokenParts := strings.Split(authHeader, " ")
+	if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
+		err := errors.New("Unauthorized")
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusUnauthorized, err.Error())
+	}
+
+	token := tokenParts[1]
+
+	sv, err := service.New(ctx)
+	if err != nil {
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
+	resp, err := sv.LineLoginGetUserProfile(token)
+	if err != nil {
+		ctx.Logger().Error(err)
+		return ctx.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(200, resp)
 }
