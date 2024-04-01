@@ -8,6 +8,7 @@ import (
 
 type Action interface {
 	webhookAction
+	lineLoginAction
 }
 
 type service struct {

@@ -9,6 +9,8 @@ import (
 
 func APIRegister(server *echo.Echo) {
 	server.POST("/v1/webhook", handler.MessagingAPIWebhook, middleware.LineSignatureValidation)
+	server.POST("/v1/login", handler.LineLoginGotoAuthPage)
+	server.POST("/v1/login/callback", handler.LineLoginCallback)
 
 	server.POST("/v1/products", handler.GetProductsApi)
 	server.POST("/v1/buy-product", handler.BuyProductsAPI)
