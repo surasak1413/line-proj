@@ -11,7 +11,7 @@ import (
 
 func GetUserProfileByUserID(userID string) (*GetUserProfileByUserIDResponse, error) {
 	resp, err := resty.New().R().
-		SetAuthToken(config.Line.LineChannelAccessToken).
+		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
 		Get(fmt.Sprintf("https://api.line.me/v2/bot/profile/%s", userID))
 	if err != nil {
 		return nil, err
