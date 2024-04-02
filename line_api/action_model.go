@@ -9,9 +9,9 @@ type PostbackAction struct {
 	Type        string `json:"type"`
 	Label       string `json:"label"` // max 20
 	Data        string `json:"data"`  // data สำหรับ webhook postback event (max 300)
-	DisplayText string `json:"displayText"`
-	InputOption string `json:"inputOption"`
-	FillInText  string `json:"fillInText"`
+	DisplayText string `json:"displayText,omitempty"`
+	InputOption string `json:"inputOption,omitempty"`
+	FillInText  string `json:"fillInText,omitempty"`
 }
 
 type MessageAction struct {

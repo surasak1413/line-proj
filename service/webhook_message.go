@@ -69,64 +69,65 @@ func (sv *service) WebHookActionTypeMessage(event request.Event) error {
 }
 
 func (sv *service) InteractWithUserCommand(event request.Event) error {
-	switch strings.TrimSpace(strings.ToLower(event.Message.Text)) {
+	command := strings.TrimSpace(strings.ToLower(event.Message.Text))
+	switch command {
 	case UserCommandHelp:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageAllUserCommand(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyText:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageText(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplySticker:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageSticker(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyImage:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageImage(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyVideo:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageVideo(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyLocation:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageLocation(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyTemplateButtons:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageTemplateButtons(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyTemplateConfirm:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageTemplateConfirm(event); err != nil {
 			return err
 		}
 	case UserCommandPushReplyFlex:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleReplyMessageFlex(event); err != nil {
 			return err
 		}
 	case UserCommandPush:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExamplePushMessage(event); err != nil {
 			return err
 		}
 	case UserCommandMulticast:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleMulticastMessage(event); err != nil {
 			return err
 		}
 	case UserCommandBroadcast:
-		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, command)
 		if err := sv.ExampleBroadcastMessage(event); err != nil {
 			return err
 		}
