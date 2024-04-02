@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func (sv *service) ExamplePushMessageAllUserCommand(event request.Event) error {
+func (sv *service) ExampleReplyMessageAllUserCommand(event request.Event) error {
 	body := line_api.ReplyMessageRequest{
 		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
@@ -29,14 +29,32 @@ func (sv *service) ExamplePushMessageAllUserCommand(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExampleReplyMessage(event request.Event) error {
+func (sv *service) ExampleReplyMessageText(event request.Event) error {
 	body := line_api.ReplyMessageRequest{
 		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
+			// ตัวอย่างการส่ง message ธรรมดา
 			line_api.TextMessage{
 				Type: MessageTypeText,
-				Text: "reply message",
+				Text: "reply text message",
+			},
+			// ตัวอย่างการใส่ emoji ใน text ปกติ
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: "$ reply text message with emoji $", // $ คือ placeholder ของ emoji
+				Emojis: []line_api.Emoji{
+					{
+						Index:     0,
+						ProductID: "5ac21e6c040ab15980c9b444",
+						EmojiID:   "001",
+					},
+					{
+						Index:     32,
+						ProductID: "5ac1bfd5040ab15980c9b435",
+						EmojiID:   "002",
+					},
+				},
 			},
 		},
 	}
@@ -48,46 +66,9 @@ func (sv *service) ExampleReplyMessage(event request.Event) error {
 	return nil
 }
 
-func (sv *service) ExamplePushMessageText(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
-		Messages: []interface{}{
-			// สูงสุด 5 message
-			// ตัวอย่างการส่ง message ธรรมดา
-			line_api.TextMessage{
-				Type: MessageTypeText,
-				Text: "push text message",
-			},
-			// ตัวอย่างการใส่ emoji ใน text ปกติ
-			line_api.TextMessage{
-				Type: MessageTypeText,
-				Text: "$ push text message with emoji $", // $ คือ placeholder ของ emoji
-				Emojis: []line_api.Emoji{
-					{
-						Index:     0,
-						ProductID: "5ac21e6c040ab15980c9b444",
-						EmojiID:   "001",
-					},
-					{
-						Index:     31,
-						ProductID: "5ac1bfd5040ab15980c9b435",
-						EmojiID:   "002",
-					},
-				},
-			},
-		},
-	}
-
-	if err := line_api.PushMessage(body); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (sv *service) ExamplePushMessageSticker(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageSticker(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่ง sticker
@@ -99,16 +80,16 @@ func (sv *service) ExamplePushMessageSticker(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageImage(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageImage(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่งภาพ
@@ -120,16 +101,16 @@ func (sv *service) ExamplePushMessageImage(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageVideo(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageVideo(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่งวิดีโอ
@@ -141,16 +122,16 @@ func (sv *service) ExamplePushMessageVideo(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageLocation(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageLocation(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่ง location
@@ -164,22 +145,22 @@ func (sv *service) ExamplePushMessageLocation(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageTemplateButtons(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageTemplateButtons(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่ง template
 			line_api.TemplateMessage{
 				Type:    MessageTypeTemplate,
-				AltText: "push buttons template",
+				AltText: "reply buttons template",
 				Template: line_api.ButtonsTemplate{
 					Type:                 TemplateTypeButtons,
 					ThumbnailImageURL:    "https://picsum.photos/500",
@@ -187,18 +168,18 @@ func (sv *service) ExamplePushMessageTemplateButtons(event request.Event) error 
 					ImageSize:            ImageSizeContain,
 					ImageBackgroundColor: "#FFFFFF",
 					Title:                "Title example",
-					Text:                 "Text example",
+					Text:                 "Tap image or text then user will send 'Tap triggered!'",
 					DefaultAction: line_api.MessageAction{
 						Type:  ActionTypeMessage,
-						Label: "Default message action label",
-						Text:  "Default message action text",
+						Label: "Default label",
+						Text:  "Tap triggered!",
 					},
 					Actions: []interface{}{
 						// สูงสุด 5 object
 						line_api.MessageAction{
 							Type:  ActionTypeMessage,
 							Label: "Message action",
-							Text:  "user trigger message action",
+							Text:  "User trigger message action",
 						},
 						line_api.URIAction{
 							Type:  ActionTypeURI,
@@ -211,22 +192,22 @@ func (sv *service) ExamplePushMessageTemplateButtons(event request.Event) error 
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageTemplateConfirm(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageTemplateConfirm(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			// ตัวอย่างการส่ง template
 			line_api.TemplateMessage{
 				Type:    MessageTypeTemplate,
-				AltText: "push confirm template",
+				AltText: "reply confirm template",
 				Template: line_api.ConfirmTemplate{
 					Type: TemplateTypeConfirm,
 					Text: "Display text",
@@ -248,16 +229,16 @@ func (sv *service) ExamplePushMessageTemplateConfirm(event request.Event) error 
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (sv *service) ExamplePushMessageFlex(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+func (sv *service) ExampleReplyMessageFlex(event request.Event) error {
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.FlexMessage{
@@ -380,6 +361,25 @@ func (sv *service) ExamplePushMessageFlex(event request.Event) error {
 						},
 					},
 				},
+			},
+		},
+	}
+
+	if err := line_api.ReplyMessage(body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv *service) ExamplePushMessage(event request.Event) error {
+	body := line_api.PushMessageRequest{
+		To: event.Source.UserID,
+		Messages: []interface{}{
+			// สูงสุด 5 message
+			line_api.TextMessage{
+				Type: MessageTypeText,
+				Text: "push message",
 			},
 		},
 	}

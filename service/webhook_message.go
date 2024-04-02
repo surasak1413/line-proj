@@ -15,18 +15,18 @@ const (
 	MessageTypeTemplate = "template"
 	MessageTypeFlex     = "flex"
 
-	UserCommandHelp                = "help"
-	UserCommandReply               = "reply"
-	UserCommandPushText            = "push_text"
-	UserCommandPushSticker         = "push_sticker"
-	UserCommandPushImage           = "push_image"
-	UserCommandPushVideo           = "push_video"
-	UserCommandPushLocation        = "push_location"
-	UserCommandPushTemplateButtons = "push_template_buttons"
-	UserCommandPushTemplateConfirm = "push_template_confirm"
-	UserCommandPushFlex            = "push_flex"
-	UserCommandMulticast           = "multicast"
-	UserCommandBroadcast           = "broadcast"
+	UserCommandHelp                     = "help"
+	UserCommandPushReplyText            = "text"
+	UserCommandPushReplySticker         = "sticker"
+	UserCommandPushReplyImage           = "image"
+	UserCommandPushReplyVideo           = "video"
+	UserCommandPushReplyLocation        = "location"
+	UserCommandPushReplyTemplateButtons = "buttons"
+	UserCommandPushReplyTemplateConfirm = "confirm"
+	UserCommandPushReplyFlex            = "flex"
+	UserCommandPush                     = "push"
+	UserCommandMulticast                = "multicast"
+	UserCommandBroadcast                = "broadcast"
 
 	TemplateTypeButtons = "buttons"
 	TemplateTypeConfirm = "confirm"
@@ -44,15 +44,15 @@ const (
 
 var AllUserCommand = []string{
 	UserCommandHelp,
-	UserCommandReply,
-	UserCommandPushText,
-	UserCommandPushSticker,
-	UserCommandPushImage,
-	UserCommandPushVideo,
-	UserCommandPushLocation,
-	UserCommandPushTemplateButtons,
-	UserCommandPushTemplateConfirm,
-	UserCommandPushFlex,
+	UserCommandPushReplyText,
+	UserCommandPushReplySticker,
+	UserCommandPushReplyImage,
+	UserCommandPushReplyVideo,
+	UserCommandPushReplyLocation,
+	UserCommandPushReplyTemplateButtons,
+	UserCommandPushReplyTemplateConfirm,
+	UserCommandPushReplyFlex,
+	UserCommandPush,
 	UserCommandMulticast,
 	UserCommandBroadcast,
 }
@@ -72,52 +72,52 @@ func (sv *service) InteractWithUserCommand(event request.Event) error {
 	switch strings.TrimSpace(strings.ToLower(event.Message.Text)) {
 	case UserCommandHelp:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageAllUserCommand(event); err != nil {
+		if err := sv.ExampleReplyMessageAllUserCommand(event); err != nil {
 			return err
 		}
-	case UserCommandReply:
+	case UserCommandPushReplyText:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExampleReplyMessage(event); err != nil {
+		if err := sv.ExampleReplyMessageText(event); err != nil {
 			return err
 		}
-	case UserCommandPushText:
+	case UserCommandPushReplySticker:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageText(event); err != nil {
+		if err := sv.ExampleReplyMessageSticker(event); err != nil {
 			return err
 		}
-	case UserCommandPushSticker:
+	case UserCommandPushReplyImage:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageSticker(event); err != nil {
+		if err := sv.ExampleReplyMessageImage(event); err != nil {
 			return err
 		}
-	case UserCommandPushImage:
+	case UserCommandPushReplyVideo:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageImage(event); err != nil {
+		if err := sv.ExampleReplyMessageVideo(event); err != nil {
 			return err
 		}
-	case UserCommandPushVideo:
+	case UserCommandPushReplyLocation:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageVideo(event); err != nil {
+		if err := sv.ExampleReplyMessageLocation(event); err != nil {
 			return err
 		}
-	case UserCommandPushLocation:
+	case UserCommandPushReplyTemplateButtons:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageLocation(event); err != nil {
+		if err := sv.ExampleReplyMessageTemplateButtons(event); err != nil {
 			return err
 		}
-	case UserCommandPushTemplateButtons:
+	case UserCommandPushReplyTemplateConfirm:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageTemplateButtons(event); err != nil {
+		if err := sv.ExampleReplyMessageTemplateConfirm(event); err != nil {
 			return err
 		}
-	case UserCommandPushTemplateConfirm:
+	case UserCommandPushReplyFlex:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageTemplateConfirm(event); err != nil {
+		if err := sv.ExampleReplyMessageFlex(event); err != nil {
 			return err
 		}
-	case UserCommandPushFlex:
+	case UserCommandPush:
 		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
-		if err := sv.ExamplePushMessageFlex(event); err != nil {
+		if err := sv.ExamplePushMessage(event); err != nil {
 			return err
 		}
 	case UserCommandMulticast:

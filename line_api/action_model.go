@@ -21,10 +21,10 @@ type MessageAction struct {
 }
 
 type URIAction struct {
-	Type   string `json:"type"`
-	Label  string `json:"label"`  // max 20
-	URI    string `json:"uri"`    // max 1000
-	AltURI AltURI `json:"altUri"` // uri สำหรับการเปิด LINE ผ่านช่องทางอื่นนอกจาก mobile app ถ้าไม่เซ็ตจะใช้อันเดียวกับ URI
+	Type   string  `json:"type"`
+	Label  string  `json:"label"`            // max 20
+	URI    string  `json:"uri"`              // max 1000
+	AltURI *AltURI `json:"altUri,omitempty"` // uri สำหรับการเปิด LINE ผ่านช่องทางอื่นนอกจาก mobile app ถ้าไม่เซ็ตจะใช้อันเดียวกับ URI
 }
 
 type AltURI struct {

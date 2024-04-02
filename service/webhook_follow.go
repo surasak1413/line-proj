@@ -46,8 +46,8 @@ func (sv *service) WebHookActionTypeFollow(event request.Event) error {
 		return err
 	}
 
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.TextMessage{
@@ -57,7 +57,7 @@ func (sv *service) WebHookActionTypeFollow(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 

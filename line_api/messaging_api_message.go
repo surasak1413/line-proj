@@ -1,6 +1,7 @@
 package line_api
 
 import (
+	"encoding/json"
 	"fmt"
 	"line-proj/config"
 	"net/http"
@@ -9,6 +10,14 @@ import (
 )
 
 func ReplyMessage(body ReplyMessageRequest) error {
+	prettyJSON, err := json.MarshalIndent(body, "", "    ")
+	if err != nil {
+
+		return err
+	}
+
+	fmt.Println(string(prettyJSON))
+
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
 		SetBody(body).
@@ -25,6 +34,14 @@ func ReplyMessage(body ReplyMessageRequest) error {
 }
 
 func PushMessage(body PushMessageRequest) error {
+	prettyJSON, err := json.MarshalIndent(body, "", "    ")
+	if err != nil {
+
+		return err
+	}
+
+	fmt.Println(string(prettyJSON))
+
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
 		SetBody(body).
