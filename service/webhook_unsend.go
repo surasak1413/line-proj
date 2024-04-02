@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 	"line-proj/request"
 )
 
@@ -12,7 +13,7 @@ func (sv *service) WebHookActionTypeUnsend(event request.Event) error {
 		return err
 	}
 
-	sv.ctx.Logger().Debug(string(prettyJSON))
+	fmt.Println(string(prettyJSON))
 
 	return nil
 }

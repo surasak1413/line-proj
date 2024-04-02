@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"line-proj/request"
 )
 
@@ -45,7 +46,7 @@ func (sv *service) MessagingAPIWebhook(req request.MessagingAPIWebhookRequest) e
 }
 
 func (sv *service) WebhookSourceTypeUser(event request.Event) error {
-	sv.ctx.Logger().Debugf("userID %s trigger event %s", event.Source.UserID, event.Type)
+	fmt.Printf("userID %s trigger event %s\n", event.Source.UserID, event.Type)
 
 	switch event.Type {
 	case EventTypeMessage:

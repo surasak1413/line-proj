@@ -1,11 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"line-proj/request"
 )
 
 func (sv *service) WebHookActionTypeUnfollow(event request.Event) error {
-	sv.ctx.Logger().Debugf("userID %s unfollowed!", event.Source.UserID)
+	fmt.Printf("userID %s unfollowed!\n", event.Source.UserID)
 
 	return nil
 }

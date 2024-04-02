@@ -7,7 +7,7 @@ import (
 )
 
 func (sv *service) WebHookActionTypePostback(event request.Event) error {
-	sv.ctx.Logger().Debugf("userID %s trigger postback!", event.Source.UserID)
+	fmt.Printf("userID %s trigger postback!\n", event.Source.UserID)
 
 	body := line_api.PushMessageRequest{
 		To: event.Source.UserID,

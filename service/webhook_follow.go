@@ -8,7 +8,7 @@ import (
 )
 
 func (sv *service) WebHookActionTypeFollow(event request.Event) error {
-	sv.ctx.Logger().Debugf("userID %s followed!", event.Source.UserID)
+	fmt.Printf("userID %s followed!\n", event.Source.UserID)
 
 	instance.FollowerUserID = append(instance.FollowerUserID, event.Source.UserID)
 

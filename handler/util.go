@@ -3,6 +3,7 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/labstack/echo/v4"
@@ -31,7 +32,7 @@ func printRequestBody(ctx echo.Context) error {
 		return err
 	}
 
-	ctx.Logger().Debug(string(prettyJSON))
+	fmt.Println(string(prettyJSON))
 
 	return nil
 }
