@@ -411,7 +411,7 @@ func (sv *service) ExampleMulticastMessage(event request.Event) error {
 		return err
 	}
 
-	userIdMap := userMap[config.Line.LineChannelID]
+	userIdMap := userMap[config.Line.LineMessageChannelID]
 
 	var userIds []string
 	for userId, follow := range userIdMap {

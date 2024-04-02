@@ -29,7 +29,7 @@ func LineLoginIssueAccessToken(redirectURL, code string) (*IssueAccessTokenRespo
 	queryParams.Set("grant_type", "authorization_code")
 	queryParams.Set("code", code)
 	queryParams.Set("redirect_uri", redirectURL)
-	queryParams.Set("client_id", config.Line.LineChannelID)
+	queryParams.Set("client_id", config.Line.LineLoginChannelID)
 	queryParams.Set("client_secret", config.Line.LineChannelSecret)
 
 	resp, err := resty.New().R().
@@ -64,7 +64,7 @@ func LineLoginRefreshToken(refreshToken string) (*RefreshTokenResponse, error) {
 	queryParams := url.Values{}
 	queryParams.Set("grant_type", "refresh_token")
 	queryParams.Set("refresh_token", refreshToken)
-	queryParams.Set("client_id", config.Line.LineChannelID)
+	queryParams.Set("client_id", config.Line.LineLoginChannelID)
 	queryParams.Set("client_secret", config.Line.LineChannelSecret)
 
 	resp, err := resty.New().R().
