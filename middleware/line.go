@@ -26,10 +26,12 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		body, err := io.ReadAll(ctx.Request().Body)
 		if err != nil {
+			ctx.Logger().Error(err)
 			return ctx.String(http.StatusInternalServerError, err.Error())
 		}
 
 		if err := ctx.Request().Body.Close(); err != nil {
+			ctx.Logger().Error(err)
 			return ctx.String(http.StatusInternalServerError, err.Error())
 		}
 
@@ -37,10 +39,12 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 
 		signature := ctx.Request().Header.Get("x-line-signature")
 		if util.IsEmptyString(signature) {
+			ctx.Logger().Error(ErrSignatureHeaderMissing)
 			return ctx.String(http.StatusInternalServerError, ErrSignatureHeaderMissing.Error())
 		}
 
 		if !ValidateSignature(config.Line.LineChannelSecret, signature, body) {
+			ctx.Logger().Error(ErrInvalidSignature)
 			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature.Error())
 		}
 
