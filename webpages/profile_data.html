@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>โปรไฟล์</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+        rel="stylesheet">
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/profile.css" rel="stylesheet" type="text/css" />
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center min-h-550px h-100 align-items-center p-1">
+        <div class=" mt-2  h-100 w-100 w-md-550px  " style="border-radius: 5px;">
+            <div class="proflile-img">
+                <img id="profile_img"
+                    src="https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png">
+            </div>
+
+            <div class=" d-flex justify-content-start mt-5">
+                <span class=" fw-bolder fs-3">
+                    User Id : <span class="fw-normal" id="lbl_user_id"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-start ">
+                <span class=" fw-bolder fs-3">
+                    ชื่อ : <span class="fw-normal" id="lbl_name1"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-start ">
+                <span class=" fw-bolder fs-3">
+                    สถานะ : <span class="fw-normal" id="lbl_status"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-start align-items-start ">
+                <span class=" fw-bolder fs-3 align-items-center ">
+                    AccessToken : <span class="fw-normal" id="lbl_access"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-start align-items-start ">
+                <span class=" fw-bolder fs-3 align-items-center ">
+                    RefreshToken : <span class="fw-normal" id="lbl_refresh"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-start align-items-start ">
+                <span class=" fw-bolder fs-3 align-items-center ">
+                    ExpiresIn : <span class="fw-normal" id="lbl_expires_in"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center mt-10">
+                <span class=" d-flex justify-content-center fs-1 fw-bold btn btn-primary w-250px "
+                    onclick="onGetProfile()">GetUserProfile
+                </span>
+            </div>
+
+            <div class=" d-flex justify-content-center mt-10">
+                <span class=" d-flex justify-content-center fs-1 fw-bold btn btn-success w-250px "
+                    onclick="onRefreshToken()">RefreshToken
+                </span>
+            </div>
+
+
+            <div class=" d-flex justify-content-center mt-10">
+                <span class=" d-flex justify-content-center fs-1 fw-bold btn btn-info w-250px "
+                    onclick="location.href='./line_login.html'">Login
+                </span>
+            </div>
+
+        </div>
+
+</body>
+
+
+<script src=" assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+
+<script>
+
+    let profileData = {}
+
+    function loadData() {
+        profileData = JSON.parse(localStorage.getItem("line_user_data"))
+        if (profileData) {
+            if (`${profileData.picture_url || ''}` != '') {
+                $("#profile_img").attr("src", profileData.picture_url)
+            }
+            $("#lbl_user_id").html(profileData.user_id)
+            $("#lbl_name1").html(profileData.display_name)
+            $("#lbl_name2").html(profileData.display_name)
+            $("#lbl_status").html(profileData.status_message)
+            $("#lbl_access").html(profileData.access_token)
+            $("#lbl_refresh").html(profileData.refresh_token)
+            $("#lbl_expires_in").html(profileData.expires_in)
+
+
+        } else {
+            location.href = './line_login.html'
+        }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        loadData();
+    });
+
+
+
+
+    function onGetProfile() {
+        $.ajax({
+            url: `/v1/login/profile`,
+            headers: {
+                'Authorization': `Bearer ${profileData.access_token}`,
+            },
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                console.log("response onGetProfile", response)
+                profileData = {
+                    ...profileData,
+                    ...response,
+                }
+                localStorage.setItem("line_user_data", JSON.stringify(profileData))
+                loadData();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+    function onRefreshToken() {
+        $.ajax({
+            url: `/v1/login/refresh`,
+            headers: {
+                'Authorization': `Bearer ${profileData.refresh_token}`,
+            },
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                console.log("response onRefreshToken", response)
+                profileData = {
+                    ...profileData,
+                    ...response,
+                }
+                localStorage.setItem("line_user_data", JSON.stringify(profileData))
+                loadData();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+</script>
+
+</html>

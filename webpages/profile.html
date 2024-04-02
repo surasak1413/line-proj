@@ -24,6 +24,7 @@
                     src="https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png">
             </div>
 
+
             <div class=" d-flex justify-content-center mt-6">
                 <span class=" fw-bolder " style="font-size: 30px;" id="lbl_name1">
 
@@ -52,6 +53,11 @@
             <div class=" d-flex justify-content-center align-items-center ">
                 <span class=" fw-bolder fs-3 align-items-center ">
                     Line version : <span id="lbl_line_ver"></span>
+                </span>
+            </div>
+            <div class=" d-flex justify-content-center ">
+                <span class=" fw-bolder fs-3">
+                    User Id : <span class="fw-normal" id="lbl_user_id"></span>
                 </span>
             </div>
             <div class=" d-flex justify-content-center mt-5">
@@ -103,6 +109,8 @@
                 if (`${window.Profile.picture_url || ''}` != '') {
                     $("#profile_img").attr("src", window.Profile.picture_url)
                 }
+
+                $("#lbl_user_id").html(window.Profile.user_id)
                 $("#lbl_name1").html(window.Profile.display_name)
                 $("#lbl_name2").html(window.Profile.display_name)
                 $("#lbl_status").html(window.Profile.status_message)

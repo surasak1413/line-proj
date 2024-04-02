@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+</head>
+
+<body>
+    <div class=" d-flex justify-content-center mt-10">
+        <span class=" d-flex justify-content-center fs-1 fw-bold btn btn-success w-250px " onclick="onLineLogin()">LINE
+            LOGIN</span>
+    </div>
+
+</body>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/js/scripts.bundle.js"></script>
+<script>
+
+
+    function onLineLogin() {
+        $.ajax({
+            url: `/v1/login`,
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                location.href = response.url
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+
+</script>
+
+</html>

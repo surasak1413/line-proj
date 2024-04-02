@@ -39,7 +39,8 @@
             type: "POST",
             contentType: "application/json",
             success: function (response) {
-                console.log("response", response)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                localStorage.setItem("line_user_data",JSON.stringify(response))   
+                location.href="./profile_data.html"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             },
             error: function (jqXHR, textStatus, errorThrown) {
             }
