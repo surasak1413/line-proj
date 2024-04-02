@@ -1,6 +1,10 @@
 package line_api
 
 /*
+message object ทั้งหมดอ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#message-objects
+*/
+
+/*
 อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#text-message
 */
 type TextMessage struct {
