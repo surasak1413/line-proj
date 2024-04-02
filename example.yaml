@@ -1,0 +1,9 @@
+# ตัวอย่าง config ด้วย .yaml
+# ต้องเปลี่ยนชื่อไฟล์ที่จะโหลดให้ตรงกับใน code
+
+port: "xxx"
+server_url: "xxx"
+
+line_channel_id: "xxx"
+line_channel_secret: "xxx"
+line_channel_messaging_access_token: "xxx"

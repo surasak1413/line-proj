@@ -3,9 +3,9 @@ package config
 import "os"
 
 type lineConfig struct {
-	LineChannelID                   string
-	LineChannelSecret               string
-	LineChannelMessagingAccessToken string
+	LineChannelID                   string `yaml:"line_channel_id"`
+	LineChannelSecret               string `yaml:"line_channel_secret"`
+	LineChannelMessagingAccessToken string `yaml:"line_channel_messaging_access_token"`
 }
 
 func LoadLineConfig() lineConfig {

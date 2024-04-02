@@ -19,9 +19,14 @@ func main() {
 	server.Logger.SetLevel(log.DEBUG)
 
 	// load config
-	if err := config.NewConfig(); err != nil {
+	if err := config.NewConfig(".env"); err != nil {
 		server.Logger.Fatalf("load config error : %s", err.Error())
 	}
+
+	// load config with json
+	// if err := config.NewConfigWithYaml("config.yaml"); err != nil {
+	// 	server.Logger.Fatalf("load config error : %s", err.Error())
+	// }
 
 	// register api route
 	registry.APIRegister(server)

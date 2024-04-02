@@ -44,3 +44,5 @@ app_mac_amd
 build.sh
 
 bin
+
+config.yaml

@@ -3,8 +3,8 @@ package config
 import "os"
 
 type appConfig struct {
-	Port      string
-	ServerURL string
+	Port      string `yaml:"port"`
+	ServerURL string `yaml:"server_url"`
 }
 
 func LoadAppConfig() appConfig {
