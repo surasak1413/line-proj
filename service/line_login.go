@@ -17,7 +17,7 @@ type lineLoginAction interface {
 }
 
 /*
-อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/line-login/integrate-line-login/#making-an-authorization-request
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/line-login/integrate-line-login/
 */
 func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	baseURL := "https://access.line.me/oauth2/v2.1/authorize"
