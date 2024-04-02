@@ -22,7 +22,9 @@ func LineLoginGotoAuthPage(ctx echo.Context) error {
 		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(http.StatusSeeOther, *url)
+	return ctx.JSON(200, map[string]interface{}{
+		"url": url,
+	})
 }
 
 func LineLoginAuth(ctx echo.Context) error {

@@ -35,15 +35,15 @@ func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	q := req.URL.Query()
 	queryParams := url.Values{}
 	queryParams.Set("response_type", "code")
-	queryParams.Set("client_id", config.Line.LineChannelID)
-	queryParams.Set("redirect_uri", fmt.Sprintf("%s/v1/callback", config.App.ServerURL)) // TODO change to callback uri
+	queryParams.Set("client_id", config.Line.LineLoginChannelID)
+	queryParams.Set("redirect_uri", config.App.ServerURL) // TODO change to callback uri
 	queryParams.Set("state", "")
 	queryParams.Set("scope", "profile openid") // scope อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/line-login/integrate-line-login/#scopes
 	queryParams.Set("nonce", "")
 
 	req.URL.RawQuery = q.Encode()
 
-	url := req.URL.String()
+	url := fmt.Sprintf("%s?%s", req.URL.String(), queryParams.Encode())
 
 	return &url, nil
 }
@@ -53,7 +53,7 @@ func (sv *service) LineLoginAuth(code, state string) (*response.LineUserProfileW
 	// TODO implement
 
 	// get access token
-	token, err := line_api.LineLoginIssueAccessToken(fmt.Sprintf("%s/v1/callback", config.App.ServerURL), code) // TODO change to callback uri
+	token, err := line_api.LineLoginIssueAccessToken(config.App.ServerURL, code) // TODO change to callback uri
 	if err != nil {
 		return nil, err
 	}

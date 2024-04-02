@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             contentType: "application/json",
             success: function (response) {
                 window.liffId = response.id || "";
+
                 liff.init({
                     liffId: window.liffId,
                 }).then(() => {
@@ -60,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }).catch((err) => {
                     liff.login();
                 });
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
             }

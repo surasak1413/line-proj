@@ -26,11 +26,11 @@ func (sv *service) WebHookActionTypeFollow(event request.Event) error {
 		return err
 	}
 
-	if userMap[config.Line.LineChannelID] == nil {
-		userMap[config.Line.LineChannelID] = make(map[string]bool)
+	if userMap[config.Line.LineMessageChannelID] == nil {
+		userMap[config.Line.LineMessageChannelID] = make(map[string]bool)
 	}
 
-	userMap[config.Line.LineChannelID][event.Source.UserID] = true
+	userMap[config.Line.LineMessageChannelID][event.Source.UserID] = true
 
 	updatedData, err := json.MarshalIndent(userMap, "", "  ")
 	if err != nil {
