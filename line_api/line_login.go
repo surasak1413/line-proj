@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"line-proj/config"
 	"net/http"
-	"net/url"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -25,15 +24,14 @@ type IssueAccessTokenResponse struct {
 }
 
 func LineLoginIssueAccessToken(redirectURL, code string) (*IssueAccessTokenResponse, error) {
-	queryParams := url.Values{}
-	queryParams.Set("grant_type", "authorization_code")
-	queryParams.Set("code", code)
-	queryParams.Set("redirect_uri", redirectURL)
-	queryParams.Set("client_id", config.Line.LineLoginChannelID)
-	queryParams.Set("client_secret", config.Line.LineLoginChannelSecret)
-
 	resp, err := resty.New().R().
-		SetQueryParamsFromValues(queryParams).
+		SetFormData(map[string]string{
+			"grant_type":    "authorization_code",
+			"code":          code,
+			"redirect_uri":  redirectURL,
+			"client_id":     config.Line.LineLoginChannelID,
+			"client_secret": config.Line.LineLoginChannelSecret,
+		}).
 		Post("https://api.line.me/oauth2/v2.1/token")
 	if err != nil {
 		return nil, err
@@ -61,14 +59,13 @@ type RefreshTokenResponse struct {
 }
 
 func LineLoginRefreshToken(refreshToken string) (*RefreshTokenResponse, error) {
-	queryParams := url.Values{}
-	queryParams.Set("grant_type", "refresh_token")
-	queryParams.Set("refresh_token", refreshToken)
-	queryParams.Set("client_id", config.Line.LineLoginChannelID)
-	queryParams.Set("client_secret", config.Line.LineLoginChannelSecret)
-
 	resp, err := resty.New().R().
-		SetQueryParamsFromValues(queryParams).
+		SetFormData(map[string]string{
+			"grant_type":    "refresh_token",
+			"refresh_token": refreshToken,
+			"client_id":     config.Line.LineLoginChannelID,
+			"client_secret": config.Line.LineLoginChannelSecret,
+		}).
 		Post("https://api.line.me/oauth2/v2.1/token")
 	if err != nil {
 		return nil, err
