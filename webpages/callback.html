@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELLO term</title>
+    <title></title>
 
     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -12,10 +12,40 @@
 </head>
 
 <body>
-    <span class=" d-flex justify-content-center fs-1 fw-bold">HELLO term of user</span>
+    <span class=" d-flex justify-content-center fs-1 fw-bold">CallBack</span>
+
+    <div class=" d-flex justify-content-center">
+        <span class=" badge badge-primary w-150px d-none" id="badge-process">processing</span>
+        <span class=" badge badge-danger w-150px d-none" id="badge-fail">fail</span>
+    </div>
+
 </body>
 
 <script src="assets/plugins/global/plugins.bundle.js"></script>
 <script src="assets/js/scripts.bundle.js"></script>
+<script>
+
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code') || '';
+    const state = url.searchParams.get('state') || '';
+
+    if (code == "" || state == "") {
+        $("#badge-fail").removeClass("d-none")
+    } else {
+        $("#badge-process").removeClass("d-none")
+
+        $.ajax({
+            url: `/v1/login/auth?code=${code}&state=${state}`,
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                console.log("response", response)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+</script>
 
 </html>

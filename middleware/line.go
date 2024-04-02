@@ -47,7 +47,7 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		// validate signature
-		if !ValidateSignature(config.Line.LineChannelSecret, signature, body) {
+		if !ValidateSignature(config.Line.LineMessageChannelSecret, signature, body) {
 			ctx.Logger().Error(ErrInvalidSignature)
 			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature.Error())
 		}

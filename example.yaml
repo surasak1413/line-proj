@@ -6,6 +6,7 @@ server_url: "xxx"
 
 line_liff_id: "xxx"
 line_login_channel_id: "xxx"
+line_login_channel_secret: "xxx"
 line_message_channel_id: "xxx"
-line_channel_secret: "xxx"
+line_message_channel_secret: "xxx"
 line_channel_messaging_access_token: "xxx"
