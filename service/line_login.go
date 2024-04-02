@@ -38,7 +38,7 @@ func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	queryParams.Set("client_id", config.Line.LineChannelID)
 	queryParams.Set("redirect_uri", fmt.Sprintf("%s/v1/callback", config.App.ServerURL)) // TODO change to callback uri
 	queryParams.Set("state", "")
-	queryParams.Set("scope", "profile openid")
+	queryParams.Set("scope", "profile openid") // scope อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/docs/line-login/integrate-line-login/#scopes
 	queryParams.Set("nonce", "")
 
 	req.URL.RawQuery = q.Encode()

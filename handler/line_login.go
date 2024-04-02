@@ -26,8 +26,8 @@ func LineLoginGotoAuthPage(ctx echo.Context) error {
 }
 
 func LineLoginAuth(ctx echo.Context) error {
-	code := ctx.FormValue("code")
-	state := ctx.FormValue("state")
+	code := ctx.QueryParam("code")
+	state := ctx.QueryParam("state")
 
 	sv, err := service.New(ctx)
 	if err != nil {
