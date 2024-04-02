@@ -46,7 +46,7 @@ func (sv *service) MessagingAPIWebhook(req request.MessagingAPIWebhookRequest) e
 }
 
 func (sv *service) WebhookSourceTypeUser(event request.Event) error {
-	fmt.Printf("userID %s trigger event %s\n", event.Source.UserID, event.Type)
+	fmt.Printf("userID %s trigger event '%s'\n", event.Source.UserID, event.Type)
 
 	switch event.Type {
 	case EventTypeMessage:

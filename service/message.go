@@ -1,16 +1,18 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
-	"line-proj/instance"
+	"line-proj/config"
 	"line-proj/line_api"
 	"line-proj/request"
+	"os"
 	"strings"
 )
 
 func (sv *service) ExamplePushMessageAllUserCommand(event request.Event) error {
-	body := line_api.PushMessageRequest{
-		To: event.Source.UserID,
+	body := line_api.ReplyMessageRequest{
+		ReplyToken: event.ReplyToken,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.TextMessage{
@@ -20,7 +22,7 @@ func (sv *service) ExamplePushMessageAllUserCommand(event request.Event) error {
 		},
 	}
 
-	if err := line_api.PushMessage(body); err != nil {
+	if err := line_api.ReplyMessage(body); err != nil {
 		return err
 	}
 
@@ -59,7 +61,7 @@ func (sv *service) ExamplePushMessageText(event request.Event) error {
 			// ตัวอย่างการใส่ emoji ใน text ปกติ
 			line_api.TextMessage{
 				Type: MessageTypeText,
-				Text: "push text message with emoji",
+				Text: "$ push text message with emoji $", // $ คือ placeholder ของ emoji
 				Emojis: []line_api.Emoji{
 					{
 						Index:     0,
@@ -67,7 +69,7 @@ func (sv *service) ExamplePushMessageText(event request.Event) error {
 						EmojiID:   "001",
 					},
 					{
-						Index:     1,
+						Index:     31,
 						ProductID: "5ac1bfd5040ab15980c9b435",
 						EmojiID:   "002",
 					},
@@ -395,8 +397,31 @@ func (sv *service) ExampleMulticastMessage(event request.Event) error {
 		return err
 	}
 
+	file, err := os.ReadFile("users.json")
+	if err != nil {
+		file = []byte("{}")
+	}
+
+	if len(file) == 0 {
+		file = []byte("{}")
+	}
+
+	userMap := make(map[string]map[string]bool)
+	if err := json.Unmarshal(file, &userMap); err != nil {
+		return err
+	}
+
+	userIdMap := userMap[config.Line.LineChannelID]
+
+	var userIds []string
+	for userId, follow := range userIdMap {
+		if follow {
+			userIds = append(userIds, userId)
+		}
+	}
+
 	body := line_api.MulticastMessageRequest{
-		To: instance.FollowerUserID,
+		To: userIds,
 		Messages: []interface{}{
 			// สูงสุด 5 message
 			line_api.TextMessage{

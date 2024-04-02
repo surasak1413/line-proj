@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"line-proj/request"
 	"strings"
 )
@@ -50,6 +51,7 @@ var AllUserCommand = []string{
 	UserCommandPushVideo,
 	UserCommandPushLocation,
 	UserCommandPushTemplateButtons,
+	UserCommandPushTemplateConfirm,
 	UserCommandPushFlex,
 	UserCommandMulticast,
 	UserCommandBroadcast,
@@ -69,50 +71,62 @@ func (sv *service) WebHookActionTypeMessage(event request.Event) error {
 func (sv *service) InteractWithUserCommand(event request.Event) error {
 	switch strings.TrimSpace(strings.ToLower(event.Message.Text)) {
 	case UserCommandHelp:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageAllUserCommand(event); err != nil {
 			return err
 		}
 	case UserCommandReply:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExampleReplyMessage(event); err != nil {
 			return err
 		}
 	case UserCommandPushText:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageText(event); err != nil {
 			return err
 		}
 	case UserCommandPushSticker:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageSticker(event); err != nil {
 			return err
 		}
 	case UserCommandPushImage:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageImage(event); err != nil {
 			return err
 		}
 	case UserCommandPushVideo:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageVideo(event); err != nil {
 			return err
 		}
 	case UserCommandPushLocation:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageLocation(event); err != nil {
 			return err
 		}
 	case UserCommandPushTemplateButtons:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageTemplateButtons(event); err != nil {
 			return err
 		}
 	case UserCommandPushTemplateConfirm:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageTemplateConfirm(event); err != nil {
 			return err
 		}
 	case UserCommandPushFlex:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExamplePushMessageFlex(event); err != nil {
 			return err
 		}
 	case UserCommandMulticast:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExampleMulticastMessage(event); err != nil {
 			return err
 		}
 	case UserCommandBroadcast:
+		fmt.Printf("userID %s trigger command '%s'\n", event.Source.UserID, event.Message.Text)
 		if err := sv.ExampleBroadcastMessage(event); err != nil {
 			return err
 		}
