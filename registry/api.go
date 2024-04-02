@@ -10,7 +10,7 @@ import (
 func APIRegister(server *echo.Echo) {
 	server.POST("/v1/webhook", handler.MessagingAPIWebhook, middleware.LineSignatureValidation)
 	server.POST("/v1/login", handler.LineLoginGotoAuthPage)
-	server.POST("/v1/login/callback", handler.LineLoginCallback)
+	server.POST("/v1/login/auth", handler.LineLoginAuth)
 	server.POST("/v1/login/refresh", handler.LineLoginRefreshToken)
 	server.POST("/v1/login/profile", handler.LineLoginGetUserProfile)
 

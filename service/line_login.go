@@ -11,7 +11,7 @@ import (
 
 type lineLoginAction interface {
 	LineLoginGetAuthPage() (*string, error)
-	LineLoginCallback(code, state string) (*response.LineUserProfileWithTokenResponse, error)
+	LineLoginAuth(code, state string) (*response.LineUserProfileWithTokenResponse, error)
 	LineLoginRefreshToken(refreshToken string) (*response.LineUserProfileWithTokenResponse, error)
 	LineLoginGetUserProfile(accessToken string) (*response.LineProfileResponse, error)
 }
@@ -36,7 +36,7 @@ func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	queryParams := url.Values{}
 	queryParams.Set("response_type", "code")
 	queryParams.Set("client_id", config.Line.LineChannelID)
-	queryParams.Set("redirect_uri", fmt.Sprintf("%s/v1/login", config.App.ServerURL))
+	queryParams.Set("redirect_uri", fmt.Sprintf("%s/v1/callback", config.App.ServerURL)) // TODO change to callback uri
 	queryParams.Set("state", "")
 	queryParams.Set("scope", "profile openid")
 	queryParams.Set("nonce", "")
@@ -48,12 +48,12 @@ func (sv *service) LineLoginGetAuthPage() (*string, error) {
 	return &url, nil
 }
 
-func (sv *service) LineLoginCallback(code, state string) (*response.LineUserProfileWithTokenResponse, error) {
+func (sv *service) LineLoginAuth(code, state string) (*response.LineUserProfileWithTokenResponse, error) {
 	// check state process
 	// TODO implement
 
 	// get access token
-	token, err := line_api.LineLoginIssueAccessToken(fmt.Sprintf("%s/v1/login/callback", config.App.ServerURL), code)
+	token, err := line_api.LineLoginIssueAccessToken(fmt.Sprintf("%s/v1/callback", config.App.ServerURL), code) // TODO change to callback uri
 	if err != nil {
 		return nil, err
 	}

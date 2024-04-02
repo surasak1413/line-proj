@@ -25,7 +25,7 @@ func LineLoginGotoAuthPage(ctx echo.Context) error {
 	return ctx.Redirect(http.StatusSeeOther, *url)
 }
 
-func LineLoginCallback(ctx echo.Context) error {
+func LineLoginAuth(ctx echo.Context) error {
 	code := ctx.FormValue("code")
 	state := ctx.FormValue("state")
 
@@ -35,7 +35,7 @@ func LineLoginCallback(ctx echo.Context) error {
 		return ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
-	resp, err := sv.LineLoginCallback(code, state)
+	resp, err := sv.LineLoginAuth(code, state)
 	if err != nil {
 		ctx.Logger().Error(err)
 		return ctx.String(http.StatusInternalServerError, err.Error())
