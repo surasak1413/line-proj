@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"line-proj/config"
 	"line-proj/line_api"
 	"net/http"
 	"os"
@@ -245,6 +246,12 @@ func GetProductsApi(ctx echo.Context) error {
 
 	return ctx.JSON(200, map[string]interface{}{
 		"datas": respData,
+	})
+}
+
+func GetLiffID(ctx echo.Context) error {
+	return ctx.JSON(200, map[string]interface{}{
+		"id": config.Line.LineLIFFID,
 	})
 }
 

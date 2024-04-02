@@ -4,6 +4,7 @@
 port: "xxx"
 server_url: "xxx"
 
+line_liff_id: "xxx"
 line_channel_id: "xxx"
 line_channel_secret: "xxx"
 line_channel_messaging_access_token: "xxx"

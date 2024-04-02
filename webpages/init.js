@@ -25,10 +25,10 @@ function showMessage(type = "success", message) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     window.accessToken = "";
     window.Profile = null;
-    const liffId = "2004358435-rDXj330L";
+
     function runApp() {
         window.accessToken = liff.getAccessToken();
         liff.getProfile().then(profile => {
@@ -43,22 +43,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
         showLoading();
-        liff.init({
-            liffId: liffId,
-        }).then(() => {
-            if (liff.isLoggedIn()) {
-                runApp()
-            } else {
-                liff.login();
+        await $.ajax({
+            url: "/v1/get-liff-id",
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                window.liffId = response.id || "";
+                liff.init({
+                    liffId: window.liffId,
+                }).then(() => {
+                    if (liff.isLoggedIn()) {
+                        runApp()
+                    } else {
+                        liff.login();
+                    }
+                }).catch((err) => {
+                    liff.login();
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
             }
-        }).catch((err) => {
-            liff.login();
         });
 
-    } catch (err) {
 
+    } catch (err) {
+        console.warn(err)
     } finally {
-        closeLoading();
+        closeLoading()
     }
 
 

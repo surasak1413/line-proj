@@ -14,6 +14,7 @@ func APIRegister(server *echo.Echo) {
 	server.POST("/v1/login/refresh", handler.LineLoginRefreshToken)
 	server.POST("/v1/login/profile", handler.LineLoginGetUserProfile)
 
+	server.POST("/v1/get-liff-id", handler.GetLiffID)
 	server.POST("/v1/products", handler.GetProductsApi)
 	server.POST("/v1/buy-product", handler.BuyProductsAPI)
 	server.POST("/v1/orders", handler.GetOrdersApi)
