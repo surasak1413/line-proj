@@ -46,7 +46,7 @@ func LineSignatureValidation(next echo.HandlerFunc) echo.HandlerFunc {
 			return ctx.String(http.StatusInternalServerError, ErrSignatureHeaderMissing.Error())
 		}
 
-		// validate signature
+		// ใช้ HMAC-SHA256 และ channel secret เป็น key ในการ validate signature
 		if !ValidateSignature(config.Line.LineChannelSecret, signature, body) {
 			ctx.Logger().Error(ErrInvalidSignature)
 			return ctx.String(http.StatusInternalServerError, ErrInvalidSignature.Error())
