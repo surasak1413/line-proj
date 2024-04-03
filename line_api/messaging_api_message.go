@@ -9,6 +9,11 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+/*
+API มีจำกัด	request ต่อช่วงเวลา อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/messaging-api/#rate-limits
+*/
+
+// limit 2,000 requests per second
 func ReplyMessage(body ReplyMessageRequest) error {
 	prettyJSON, err := json.MarshalIndent(body, "", "    ")
 	if err != nil {
@@ -33,6 +38,7 @@ func ReplyMessage(body ReplyMessageRequest) error {
 	return nil
 }
 
+// limit 2,000 requests per second
 func PushMessage(body PushMessageRequest) error {
 	prettyJSON, err := json.MarshalIndent(body, "", "    ")
 	if err != nil {
@@ -57,6 +63,7 @@ func PushMessage(body PushMessageRequest) error {
 	return nil
 }
 
+// limit 2,000 requests per second
 func MulticastMessage(body MulticastMessageRequest) error {
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineMessagingAccessToken).
@@ -73,6 +80,7 @@ func MulticastMessage(body MulticastMessageRequest) error {
 	return nil
 }
 
+// limit 60 requests per hour
 func BroadcastMessage(body BroadcastMessageRequest) error {
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineMessagingAccessToken).

@@ -9,6 +9,7 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+// limit 2,000 requests per second
 func GetUserProfileByUserID(userID string) (*GetUserProfileByUserIDResponse, error) {
 	resp, err := resty.New().R().
 		SetAuthToken(config.Line.LineMessagingAccessToken).

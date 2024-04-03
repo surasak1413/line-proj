@@ -9,6 +9,11 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
+/*
+limit request ของ LINE Login ไม่ได้ถูกเปิดเผย
+อ่านเพิ่มเติมได้ที่ https://developers.line.biz/en/reference/line-login/#rate-limits
+*/
+
 type IssueAccessTokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int    `json:"expires_in"`
