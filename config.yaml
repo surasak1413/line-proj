@@ -1,0 +1,10 @@
+port: "xxxxx"
+server_url: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+line_messaging_channel_id: "xxxx"
+line_messaging_channel_secret: "xxxx"
+line_messaging_access_token:  "xxxx"
+
+line_liff_id:  "xxxx"
+line_login_channel_id:  "xxxx"
+line_login_channel_secret:   "xxxx"
