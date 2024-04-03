@@ -19,7 +19,7 @@ func ReplyMessage(body ReplyMessageRequest) error {
 	fmt.Println(string(prettyJSON))
 
 	resp, err := resty.New().R().
-		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
+		SetAuthToken(config.Line.LineMessagingAccessToken).
 		SetBody(body).
 		Post("https://api.line.me/v2/bot/message/reply")
 	if err != nil {
@@ -43,7 +43,7 @@ func PushMessage(body PushMessageRequest) error {
 	fmt.Println(string(prettyJSON))
 
 	resp, err := resty.New().R().
-		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
+		SetAuthToken(config.Line.LineMessagingAccessToken).
 		SetBody(body).
 		Post("https://api.line.me/v2/bot/message/push")
 	if err != nil {
@@ -59,7 +59,7 @@ func PushMessage(body PushMessageRequest) error {
 
 func MulticastMessage(body MulticastMessageRequest) error {
 	resp, err := resty.New().R().
-		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
+		SetAuthToken(config.Line.LineMessagingAccessToken).
 		SetBody(body).
 		Post("https://api.line.me/v2/bot/message/multicast")
 	if err != nil {
@@ -75,7 +75,7 @@ func MulticastMessage(body MulticastMessageRequest) error {
 
 func BroadcastMessage(body BroadcastMessageRequest) error {
 	resp, err := resty.New().R().
-		SetAuthToken(config.Line.LineChannelMessagingAccessToken).
+		SetAuthToken(config.Line.LineMessagingAccessToken).
 		SetBody(body).
 		Post("https://api.line.me/v2/bot/message/broadcast")
 	if err != nil {
